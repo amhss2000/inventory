@@ -25,7 +25,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="downloadImage()">
     <h1>School Inventory Management</h1>
     <table>
         <tr>
@@ -82,14 +82,20 @@
             };
 
             localStorage.setItem('inventory', JSON.stringify(inventory));
-        }
-    </script>
 
-    <!-- Save inventory data when the page is unloaded -->
-    <script>
-        window.addEventListener('beforeunload', function() {
-            saveInventory();
-        });
+            // Reload the page to reflect the changes
+            location.reload();
+        }
+
+        // Function to download the image file
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.href = 'https://via.placeholder.com/150'; // Replace with the actual image URL
+            link.download = 'image.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
 </body>
 </html>
