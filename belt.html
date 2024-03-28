@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Inventory - Belts</title>
+</head>
+<body>
+    <h1>School Inventory - Belts</h1>
+    <form id="inventoryForm">
+        <label for="totalBelts">Total Belts:</label>
+        <input type="number" id="totalBelts" name="totalBelts" min="0" required><br><br>
+
+        <label for="remainingBelts">Remaining Belts:</label>
+        <input type="number" id="remainingBelts" name="remainingBelts" min="0" required><br><br>
+
+        <label for="beltSize">Belt Size:</label>
+        <select id="beltSize" name="beltSize">
+            <option value="Small">Small</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+        </select><br><br>
+
+        <button type="button" onclick="updateInventory()">Update Inventory</button>
+        <button type="button" onclick="downloadAsPDF()">Download as PDF</button>
+    </form>
+
+    <script>
+        // Load inventory data from local storage
+        const inventory = JSON.parse(localStorage.getItem('beltsInventory')) || {};
+
+        document.getElementById('totalBelts').value = inventory.total || '';
+        document.getElementById('remainingBelts').value = inventory.remaining || '';
+
+        document.getElementById('beltSize').value = inventory.size || '';
+
+        // Function to update inventory quantities
+        function updateInventory() {
+            const totalBelts = parseInt(document.getElementById('totalBelts').value) || 0;
+            const remainingBelts = parseInt(document.getElementById('remainingBelts').value) || 0;
+            const beltSize = document.getElementById('beltSize').value || '';
+
+            const updatedInventory = { total: totalBelts, remaining: remainingBelts, size: beltSize };
+
+            // Save updated inventory to local storage
+            localStorage.setItem('beltsInventory', JSON.stringify(updatedInventory));
+        }
+
+        // Function to download the page as PDF
+        function downloadAsPDF() {
+            // Code to convert HTML to PDF and download
+            // Implement this functionality using a library like jsPDF or pdfmake
+            alert('Downloading as PDF...');
+        }
+    </script>
+</body>
+</html>
