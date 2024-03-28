@@ -1,0 +1,24 @@
+html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+  }
+  
+  .center {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(45deg, rgb(0, 217, 255), #2400f1,#006eff,#00c3ff);;
+  }
+  center {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(45deg, rgb(0, 195, 255), #2400f1,#006eff,#00c3ff);;
+  }
