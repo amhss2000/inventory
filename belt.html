@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Inventory Management</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .total-quantity {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>School Inventory Management</h1>
+    <form id="inventoryForm">
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Total Quantity</th>
+                <th>Remaining Quantity</th>
+                <th>Add Quantity</th>
+            </tr>
+            <tr>
+                <td>Belt</td>
+                <td id="totalBelt">100</td>
+                <td id="remainingBelt">100</td>
+                <td><input type="number" id="beltQuantity" min="1"></td>
+            </tr>
+            <tr>
+                <td>Socks</td>
+                <td id="totalSocks">200</td>
+                <td id="remainingSocks">200</td>
+                <td><input type="number" id="socksQuantity" min="1"></td>
+            </tr>
+            <tr>
+                <td>Shoe</td>
+                <td id="totalShoes">150</td>
+                <td id="remainingShoes">150</td>
+                <td><input type="number" id="shoesQuantity" min="1"></td>
+            </tr>
+            <tr>
+                <td>Uniform</td>
+                <td id="totalUniforms">300</td>
+                <td id="remainingUniforms">300</td>
+                <td><input type="number" id="uniformsQuantity" min="1"></td>
+            </tr>
+        </table>
+        <br>
+        <button type="button" onclick="updateInventory()">Update Inventory</button>
+    </form>
+
+    <script>
+        function updateInventory() {
+            const beltQuantity = parseInt(document.getElementById('beltQuantity').value) || 0;
+            const socksQuantity = parseInt(document.getElementById('socksQuantity').value) || 0;
+            const shoesQuantity = parseInt(document.getElementById('shoesQuantity').value) || 0;
+            const uniformsQuantity = parseInt(document.getElementById('uniformsQuantity').value) || 0;
+
+            const totalBelt = 100 + beltQuantity;
+            const totalSocks = 200 + socksQuantity;
+            const totalShoes = 150 + shoesQuantity;
+            const totalUniforms = 300 + uniformsQuantity;
+
+            document.getElementById('totalBelt').textContent = totalBelt;
+            document.getElementById('totalSocks').textContent = totalSocks;
+            document.getElementById('totalShoes').textContent = totalShoes;
+            document.getElementById('totalUniforms').textContent = totalUniforms;
+
+            document.getElementById('remainingBelt').textContent = totalBelt;
+            document.getElementById('remainingSocks').textContent = totalSocks;
+            document.getElementById('remainingShoes').textContent = totalShoes;
+            document.getElementById('remainingUniforms').textContent = totalUniforms;
+
+            document.getElementById('beltQuantity').value = '';
+            document.getElementById('socksQuantity').value = '';
+            document.getElementById('shoesQuantity').value = '';
+            document.getElementById('uniformsQuantity').value = '';
+        }
+    </script>
+</body>
+</html>
