@@ -6,8 +6,9 @@
     <title>School Inventory Management</title>
     <style>
         table {
-            width: 50%;
+            width: 80%;
             border-collapse: collapse;
+            margin: 20px auto;
         }
 
         th, td {
@@ -23,18 +24,37 @@
         .total-quantity {
             font-weight: bold;
         }
+
+        input[type="number"] {
+            width: 70px;
+        }
+
+        button {
+            margin: 10px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
     <h1>School Inventory Management</h1>
     <table>
         <tr>
+            <th>Category</th>
             <th>Item</th>
             <th>Total Quantity</th>
             <th>Remaining Quantity</th>
             <th>Edit Quantity</th>
         </tr>
         <tr>
+            <td rowspan="4">Clothing</td>
             <td>Belt</td>
             <td class="total-quantity" id="totalBelt">100</td>
             <td class="remaining-quantity" id="remainingBelt">100</td>
@@ -58,8 +78,8 @@
             <td class="remaining-quantity" id="remainingUniforms">300</td>
             <td><input type="number" id="uniformsInput" min="0"></td>
         </tr>
+        <!-- Add more rows for other categories -->
     </table>
-    <br>
     <button onclick="updateInventory()">Update Inventory</button>
     <button onclick="downloadPageImage()">Download Page as Image</button>
 
@@ -73,41 +93,31 @@
         // Function to update inventory quantities
         function updateInventory() {
             const inventory = {
-                belts: { total: parseInt(document.getElementById('totalBelt').textContent), remaining: parseInt(document.getElementById('remainingBelt').textContent) },
-                socks: { total: parseInt(document.getElementById('totalSocks').textContent), remaining: parseInt(document.getElementById('remainingSocks').textContent) },
-                shoes: { total: parseInt(document.getElementById('totalShoes').textContent), remaining: parseInt(document.getElementById('remainingShoes').textContent) },
-                uniforms: { total: parseInt(document.getElementById('totalUniforms').textContent), remaining: parseInt(document.getElementById('remainingUniforms').textContent) }
+                clothing: {
+                    belt: { total: parseInt(document.getElementById('totalBelt').textContent), remaining: parseInt(document.getElementById('remainingBelt').textContent) },
+                    socks: { total: parseInt(document.getElementById('totalSocks').textContent), remaining: parseInt(document.getElementById('remainingSocks').textContent) },
+                    shoes: { total: parseInt(document.getElementById('totalShoes').textContent), remaining: parseInt(document.getElementById('remainingShoes').textContent) },
+                    uniforms: { total: parseInt(document.getElementById('totalUniforms').textContent), remaining: parseInt(document.getElementById('remainingUniforms').textContent) }
+                }
+                // Add more categories and items as needed
             };
 
             // Update quantities based on user input
-            inventory.belts.total = parseInt(document.getElementById('beltInput').value) || inventory.belts.total;
-            inventory.socks.total = parseInt(document.getElementById('socksInput').value) || inventory.socks.total;
-            inventory.shoes.total = parseInt(document.getElementById('shoesInput').value) || inventory.shoes.total;
-            inventory.uniforms.total = parseInt(document.getElementById('uniformsInput').value) || inventory.uniforms.total;
+            inventory.clothing.belt.total = parseInt(document.getElementById('beltInput').value) || inventory.clothing.belt.total;
+            inventory.clothing.socks.total = parseInt(document.getElementById('socksInput').value) || inventory.clothing.socks.total;
+            inventory.clothing.shoes.total = parseInt(document.getElementById('shoesInput').value) || inventory.clothing.shoes.total;
+            inventory.clothing.uniforms.total = parseInt(document.getElementById('uniformsInput').value) || inventory.clothing.uniforms.total;
 
             // Update remaining quantities
-            inventory.belts.remaining = inventory.belts.total;
-            inventory.socks.remaining = inventory.socks.total;
-            inventory.shoes.remaining = inventory.shoes.total;
-            inventory.uniforms.remaining = inventory.uniforms.total;
+            Object.values(inventory.clothing).forEach(item => {
+                item.remaining = item.total;
+            });
 
             // Save updated inventory to local storage
             localStorage.setItem('inventory', JSON.stringify(inventory));
 
-            // Update page content with new data
-            updateInventory(inventory);
-        }
-
-        // Function to update page content with inventory data
-        function updateInventory(inventory) {
-            document.getElementById('totalBelt').textContent = inventory.belts.total;
-            document.getElementById('remainingBelt').textContent = inventory.belts.remaining;
-            document.getElementById('totalSocks').textContent = inventory.socks.total;
-            document.getElementById('remainingSocks').textContent = inventory.socks.remaining;
-            document.getElementById('totalShoes').textContent = inventory.shoes.total;
-            document.getElementById('remainingShoes').textContent = inventory.shoes.remaining;
-            document.getElementById('totalUniforms').textContent = inventory.uniforms.total;
-            document.getElementById('remainingUniforms').textContent = inventory.uniforms.remaining;
+            // Reload the page to reflect the changes
+            location.reload();
         }
 
         // Function to download the page as an image
