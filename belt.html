@@ -27,70 +27,69 @@
 </head>
 <body>
     <h1>School Inventory Management</h1>
-    <form id="inventoryForm">
-        <table>
-            <tr>
-                <th>Item</th>
-                <th>Total Quantity</th>
-                <th>Remaining Quantity</th>
-                <th>Add Quantity</th>
-            </tr>
-            <tr>
-                <td>Belt</td>
-                <td id="totalBelt">100</td>
-                <td id="remainingBelt">100</td>
-                <td><input type="number" id="beltQuantity" min="1"></td>
-            </tr>
-            <tr>
-                <td>Socks</td>
-                <td id="totalSocks">200</td>
-                <td id="remainingSocks">200</td>
-                <td><input type="number" id="socksQuantity" min="1"></td>
-            </tr>
-            <tr>
-                <td>Shoe</td>
-                <td id="totalShoes">150</td>
-                <td id="remainingShoes">150</td>
-                <td><input type="number" id="shoesQuantity" min="1"></td>
-            </tr>
-            <tr>
-                <td>Uniform</td>
-                <td id="totalUniforms">300</td>
-                <td id="remainingUniforms">300</td>
-                <td><input type="number" id="uniformsQuantity" min="1"></td>
-            </tr>
-        </table>
-        <br>
-        <button type="button" onclick="updateInventory()">Update Inventory</button>
-    </form>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Total Quantity</th>
+            <th>Remaining Quantity</th>
+        </tr>
+        <tr>
+            <td>Belt</td>
+            <td class="total-quantity" id="totalBelt">100</td>
+            <td class="remaining-quantity" id="remainingBelt">100</td>
+        </tr>
+        <tr>
+            <td>Socks</td>
+            <td class="total-quantity" id="totalSocks">200</td>
+            <td class="remaining-quantity" id="remainingSocks">200</td>
+        </tr>
+        <tr>
+            <td>Shoe</td>
+            <td class="total-quantity" id="totalShoes">150</td>
+            <td class="remaining-quantity" id="remainingShoes">150</td>
+        </tr>
+        <tr>
+            <td>Uniform</td>
+            <td class="total-quantity" id="totalUniforms">300</td>
+            <td class="remaining-quantity" id="remainingUniforms">300</td>
+        </tr>
+    </table>
 
     <script>
-        function updateInventory() {
-            const beltQuantity = parseInt(document.getElementById('beltQuantity').value) || 0;
-            const socksQuantity = parseInt(document.getElementById('socksQuantity').value) || 0;
-            const shoesQuantity = parseInt(document.getElementById('shoesQuantity').value) || 0;
-            const uniformsQuantity = parseInt(document.getElementById('uniformsQuantity').value) || 0;
-
-            const totalBelt = 100 + beltQuantity;
-            const totalSocks = 200 + socksQuantity;
-            const totalShoes = 150 + shoesQuantity;
-            const totalUniforms = 300 + uniformsQuantity;
-
-            document.getElementById('totalBelt').textContent = totalBelt;
-            document.getElementById('totalSocks').textContent = totalSocks;
-            document.getElementById('totalShoes').textContent = totalShoes;
-            document.getElementById('totalUniforms').textContent = totalUniforms;
-
-            document.getElementById('remainingBelt').textContent = totalBelt;
-            document.getElementById('remainingSocks').textContent = totalSocks;
-            document.getElementById('remainingShoes').textContent = totalShoes;
-            document.getElementById('remainingUniforms').textContent = totalUniforms;
-
-            document.getElementById('beltQuantity').value = '';
-            document.getElementById('socksQuantity').value = '';
-            document.getElementById('shoesQuantity').value = '';
-            document.getElementById('uniformsQuantity').value = '';
+        // Check if there's any saved data in localStorage
+        if (localStorage.getItem('inventory')) {
+            const inventory = JSON.parse(localStorage.getItem('inventory'));
+            updateInventory(inventory);
         }
+
+        // Function to update inventory quantities
+        function updateInventory(inventory) {
+            const items = ['belts', 'socks', 'shoes', 'uniforms'];
+
+            items.forEach(item => {
+                document.getElementById(`total${item.charAt(0).toUpperCase() + item.slice(1)}`).textContent = inventory[item].total;
+                document.getElementById(`remaining${item.charAt(0).toUpperCase() + item.slice(1)}`).textContent = inventory[item].remaining;
+            });
+        }
+
+        // Function to save updated inventory to localStorage
+        function saveInventory() {
+            const inventory = {
+                belts: { total: parseInt(document.getElementById('totalBelt').textContent), remaining: parseInt(document.getElementById('remainingBelt').textContent) },
+                socks: { total: parseInt(document.getElementById('totalSocks').textContent), remaining: parseInt(document.getElementById('remainingSocks').textContent) },
+                shoes: { total: parseInt(document.getElementById('totalShoes').textContent), remaining: parseInt(document.getElementById('remainingShoes').textContent) },
+                uniforms: { total: parseInt(document.getElementById('totalUniforms').textContent), remaining: parseInt(document.getElementById('remainingUniforms').textContent) }
+            };
+
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+        }
+    </script>
+
+    <!-- Save inventory data when the page is unloaded -->
+    <script>
+        window.addEventListener('beforeunload', function() {
+            saveInventory();
+        });
     </script>
 </body>
 </html>
