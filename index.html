@@ -2,8 +2,69 @@
 <html lang="en">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <head>
-    <link rel="stylesheet" href="style.css">
+   
     <meta charset="UTF-8" />
 <title>load</title>
 <body>
-    <meta http-equiv="refresh" content="0.1;url=index1.php" />
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading Animation</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+  }
+
+  .loader {
+    width: 80px;
+    height: 80px;
+    border: 10px solid #3498db;
+    border-top: 10px solid #fff;
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .waving-hand {
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    margin-top: 20px;
+  }
+
+  .waving-hand span {
+    animation: wave 2s infinite;
+    display: inline-block;
+    transform-origin: 70% 70%;
+  }
+
+  @keyframes wave {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(15deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-15deg); }
+    100% { transform: rotate(0deg); }
+  }
+</style>
+</head>
+<body>
+  <div class="loader"></div>
+  <div class="waving-hand">
+    <span>👋</span>
+  </div>
+</body>
+</html>
+
+    <meta http-equiv="refresh" content="3;url=home.html" />
