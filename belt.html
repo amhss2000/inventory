@@ -56,17 +56,7 @@
     <button type="button" onclick="calculate()">Calculate</button>
 </form>
 
-<table id="stockTable">
-    <tr>
-        <th>Date & Time</th>
-        <th>Total Quantity</th>
-        <th>Size 75</th>
-        <th>Size 95</th>
-        <th>Size 115</th>
-        <th>Remaining Quantity</th>
-        <th>Action</th>
-    </tr>
-</table>
+<div id="stockTableContainer"></div>
 
 <button id="printButton" onclick="printTable()">Print Table</button>
 <button onclick="shareOnWhatsApp()">Share on WhatsApp</button>
@@ -98,46 +88,67 @@
         return now.toLocaleString();
     }
 
+    // Function to display existing data when the page loads
+    function displayData() {
+        var totalQuantity = getTotalQuantity();
+        var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
+        var tableContainer = document.getElementById("stockTableContainer");
+        var tableHTML = "<table id='stockTable'><tr><th>Date & Time</th><th>Total Quantity</th><th>Size 75</th><th>Size 95</th><th>Size 115</th><th>Remaining Quantity</th><th>Action</th></tr>";
+        data.forEach(function(entry) {
+            tableHTML += "<tr>";
+            tableHTML += "<td>" + entry.dateTime + "</td>";
+            tableHTML += "<td>" + entry.totalQuantity + "</td>";
+            tableHTML += "<td>" + entry.size75 + "</td>";
+            tableHTML += "<td>" + entry.size95 + "</td>";
+            tableHTML += "<td>" + entry.size115 + "</td>";
+            tableHTML += "<td>" + entry.remainingQuantity + "</td>";
+            tableHTML += "<td><button onclick='editEntry(" + entry.id + ")'>Edit</button></td>";
+            tableHTML += "</tr>";
+        });
+        tableHTML += "</table>";
+        tableContainer.innerHTML = tableHTML;
+    }
+
     // Function to add a new entry to the table
     function addEntry(dateTime, totalQuantity, size75, size95, size115, remainingQuantity) {
-        var table = document.getElementById("stockTable");
-        var newRow = table.insertRow(-1);
-        newRow.insertCell().textContent = dateTime;
-        newRow.insertCell().textContent = totalQuantity;
-        newRow.insertCell().textContent = size75;
-        newRow.insertCell().textContent = size95;
-        newRow.insertCell().textContent = size115;
-        newRow.insertCell().textContent = remainingQuantity;
-        var editCell = newRow.insertCell();
-        var editBtn = document.createElement("button");
-        editBtn.textContent = "Edit";
-        editBtn.onclick = function() {
-            editEntry(newRow);
+        var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
+        var newData = {
+            id: data.length + 1,
+            dateTime: dateTime,
+            totalQuantity: totalQuantity,
+            size75: size75,
+            size95: size95,
+            size115: size115,
+            remainingQuantity: remainingQuantity
         };
-        editCell.appendChild(editBtn);
+        data.push(newData);
+        localStorage.setItem("beltStocksData", JSON.stringify(data));
+        displayData();
     }
 
     // Function to edit an entry
-    function editEntry(row) {
+    function editEntry(id) {
         var inputQuantity = parseInt(prompt("Enter new input quantity:"));
         if (!isNaN(inputQuantity)) {
-            var totalQuantity = parseInt(row.cells[1].textContent);
-            var size75 = parseInt(row.cells[2].textContent);
-            var size95 = parseInt(row.cells[3].textContent);
-            var size115 = parseInt(row.cells[4].textContent);
+            var totalQuantity = getTotalQuantity();
+            var size75 = parseInt(prompt("Enter quantity for Size 75:"));
+            var size95 = parseInt(prompt("Enter quantity for Size 95:"));
+            var size115 = parseInt(prompt("Enter quantity for Size 115:"));
             var remainingQuantity = calculateRemainingQuantity(totalQuantity, inputQuantity);
 
-            // Update table
-            var dateTime = getCurrentDateTime();
-            row.cells[0].textContent = dateTime;
-            row.cells[5].textContent = remainingQuantity;
-
-            // Update data in local storage
+            // Update data
             var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
-            var rowIndex = row.rowIndex - 1;
-            data[rowIndex].dateTime = dateTime;
-            data[rowIndex].remainingQuantity = remainingQuantity;
-            saveDataToStorage(data);
+            var entry = data.find(function(item) {
+                return item.id === id;
+            });
+            entry.dateTime = getCurrentDateTime();
+            entry.totalQuantity = totalQuantity;
+            entry.size75 = size75;
+            entry.size95 = size95;
+            entry.size115 = size115;
+            entry.remainingQuantity = remainingQuantity;
+            localStorage.setItem("beltStocksData", JSON.stringify(data));
+            displayData();
         } else {
             alert("Invalid input quantity!");
         }
@@ -171,49 +182,8 @@
         if (confirm("Are you sure you want to clear all data?")) {
             localStorage.removeItem("totalQuantity");
             localStorage.removeItem("beltStocksData");
-            location.reload();
+            displayData();
         }
-    }
-
-    // Function to display existing data when the page loads
-    function displayData() {
-        var totalQuantity = getTotalQuantity();
-        var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
-        data.forEach(function(entry) {
-            addEntry(entry.dateTime, entry.totalQuantity, entry.size75, entry.size95, entry.size115, entry.remainingQuantity);
-        });
-    }
-
-    // Function to save data to local storage
-    function saveDataToStorage(data) {
-        localStorage.setItem("beltStocksData", JSON.stringify(data));
-    }
-
-    // Function to calculate and add a new entry
-    function calculate() {
-        var totalQuantity = getTotalQuantity();
-        var inputQuantity = parseInt(document.getElementById("inputQuantity").value);
-        var remainingQuantity = calculateRemainingQuantity(totalQuantity, inputQuantity);
-        var size75 = parseInt(prompt("Enter quantity for Size 75:"));
-        var size95 = parseInt(prompt("Enter quantity for Size 95:"));
-        var size115 = parseInt(prompt("Enter quantity for Size 115:"));
-        var dateTime = getCurrentDateTime();
-
-        // Add entry to table
-        addEntry(dateTime, totalQuantity, size75, size95, size115, remainingQuantity);
-
-        // Save data to local storage
-        var newData = {
-            dateTime: dateTime,
-            totalQuantity: totalQuantity,
-            size75: size75,
-            size95: size95,
-            size115: size115,
-            remainingQuantity: remainingQuantity
-        };
-        var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
-        data.push(newData);
-        saveDataToStorage(data);
     }
 
     // Display existing data when the page loads
