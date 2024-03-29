@@ -17,6 +17,9 @@
     th {
         background-color: #f2f2f2;
     }
+    #printButton {
+        margin-top: 10px;
+    }
 </style>
 </head>
 <body>
@@ -38,14 +41,25 @@
     </tr>
 </table>
 
-<script>
-    // Retrieve data from local storage if available
-    var stocksData = JSON.parse(localStorage.getItem('stocksData')) || [];
+<button id="printButton" onclick="printTable()">Print Table</button>
 
-    // Display existing data in the table
+<script>
+    // Function to retrieve data from local storage
+    function getDataFromStorage() {
+        var data = localStorage.getItem('beltStocksData');
+        return data ? JSON.parse(data) : [];
+    }
+
+    // Function to save data to local storage
+    function saveDataToStorage(data) {
+        localStorage.setItem('beltStocksData', JSON.stringify(data));
+    }
+
+    // Function to display data in the table
     function displayData() {
         var table = document.getElementById("stockTable");
-        stocksData.forEach(function(entry) {
+        var data = getDataFromStorage();
+        data.forEach(function(entry) {
             var newRow = table.insertRow(-1);
             newRow.insertCell().textContent = entry.totalQuantity;
             newRow.insertCell().textContent = entry.inputQuantity;
@@ -60,57 +74,29 @@
         });
     }
 
-    // Function to edit a specific entry
+    // Function to edit an entry
     function editEntry(rowIndex) {
         var row = document.getElementById("stockTable").rows[rowIndex];
-        var totalQuantity = parseInt(row.cells[0].textContent);
-        var inputQuantity = parseInt(row.cells[1].textContent);
-        var remainingQuantity = parseInt(row.cells[2].textContent);
-        
-        // Remove the row from the table
-        row.remove();
+        var inputQuantity = parseInt(prompt("Enter new input quantity:"));
+        if (!isNaN(inputQuantity)) {
+            var totalQuantity = parseInt(row.cells[0].textContent);
+            var remainingQuantity = totalQuantity - inputQuantity;
 
-        // Update total quantity for the next calculation
-        totalQuantity += remainingQuantity;
+            // Update table
+            row.cells[1].textContent = inputQuantity;
+            row.cells[2].textContent = remainingQuantity;
 
-        // Update local storage
-        stocksData.splice(rowIndex - 1, 1);
-
-        // Insert a new row with editable input
-        var newRow = document.getElementById("stockTable").insertRow(rowIndex);
-        newRow.insertCell().textContent = totalQuantity;
-        var inputCell = newRow.insertCell();
-        var input = document.createElement("input");
-        input.type = "number";
-        input.value = inputQuantity;
-        inputCell.appendChild(input);
-        newRow.insertCell().textContent = remainingQuantity;
-        var saveCell = newRow.insertCell();
-        var saveBtn = document.createElement("button");
-        saveBtn.textContent = "Save";
-        saveBtn.onclick = function() {
-            saveEdit(rowIndex, input.value);
-        };
-        saveCell.appendChild(saveBtn);
+            // Update data in local storage
+            var data = getDataFromStorage();
+            data[rowIndex - 1].inputQuantity = inputQuantity;
+            data[rowIndex - 1].remainingQuantity = remainingQuantity;
+            saveDataToStorage(data);
+        } else {
+            alert("Invalid input quantity!");
+        }
     }
 
-    // Function to save the edited entry
-    function saveEdit(rowIndex, newInputQuantity) {
-        var row = document.getElementById("stockTable").rows[rowIndex];
-        var totalQuantity = parseInt(row.cells[0].textContent);
-        var remainingQuantity = totalQuantity - newInputQuantity;
-
-        // Update row with new data
-        row.cells[1].textContent = newInputQuantity;
-        row.cells[2].textContent = remainingQuantity;
-
-        // Update data in local storage
-        stocksData[rowIndex - 1].inputQuantity = newInputQuantity;
-        stocksData[rowIndex - 1].remainingQuantity = remainingQuantity;
-        localStorage.setItem('stocksData', JSON.stringify(stocksData));
-    }
-
-    // Function to calculate and add new entry
+    // Function to calculate and add a new entry
     function calculate() {
         var inputQuantity = parseInt(document.getElementById("inputQuantity").value);
         var table = document.getElementById("stockTable");
@@ -141,13 +127,16 @@
         // Update total quantity for the next calculation
         totalQuantity = remainingQuantity;
 
-        // Update local storage with new entry
-        stocksData.push({
-            totalQuantity: totalQuantity,
-            inputQuantity: inputQuantity,
-            remainingQuantity: remainingQuantity
-        });
-        localStorage.setItem('stocksData', JSON.stringify(stocksData));
+        // Save data to local storage
+        var newData = { totalQuantity: totalQuantity, inputQuantity: inputQuantity, remainingQuantity: remainingQuantity };
+        var data = getDataFromStorage();
+        data.push(newData);
+        saveDataToStorage(data);
+    }
+
+    // Function to print the table
+    function printTable() {
+        window.print();
     }
 
     // Display existing data when the page loads
