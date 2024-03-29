@@ -129,6 +129,17 @@
                 displayData();
             };
         };
+
+        // Save data to local storage
+        const data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
+        data.push({
+            dateTime: dateTime,
+            totalQuantity: totalQuantity,
+            // Add data for sizes 75, 95, and 115
+            inputQuantity: inputQuantity,
+            remainingQuantity: remainingQuantity
+        });
+        localStorage.setItem("beltStocksData", JSON.stringify(data));
     }
 
     // Function to display data
@@ -199,10 +210,11 @@
     // Function to clear all data
     function clearData() {
         if (confirm("Are you sure you want to clear all data?")) {
+            localStorage.removeItem("beltStocksData");
             const request = window.indexedDB.deleteDatabase("beltStocksDB");
 
             request.onerror = function(event) {
-                console.log("Error clearing database: " + event.target.errorCode);
+                console.log("Database deletion error: " + event.target.errorCode);
             };
 
             request.onsuccess = function(event) {
