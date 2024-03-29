@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Button Cube</title>
+<title>Button Curved Grid</title>
 <style>
   body {
     margin: 0;
@@ -13,68 +13,34 @@
     align-items: center;
     height: 100vh;
     background-color: skyblue;
+    font-family: Arial, sans-serif;
   }
 
   .container {
-    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     width: 300px;
     height: 300px;
-    perspective: 1000px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
   }
 
-  .cube {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    transform-style: preserve-3d;
-    animation: rotate 6s linear infinite;
-  }
-
-  .cube div {
-    position: absolute;
-    width: 90px;
-    height: 90px;
+  .button {
+    width: 80px;
+    height: 80px;
+    margin: 10px;
     background-color: #3498db;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
-    transition: transform 0.5s;
+    font-size: 14px;
+    border: none;
+    border-radius: 50%;
     cursor: pointer;
-  }
-
-  .cube div:nth-child(1) {
-    transform: rotateY(0deg) translateZ(150px);
-  }
-  .cube div:nth-child(2) {
-    transform: rotateY(90deg) translateZ(150px);
-  }
-  .cube div:nth-child(3) {
-    transform: rotateY(180deg) translateZ(150px);
-  }
-  .cube div:nth-child(4) {
-    transform: rotateY(-90deg) translateZ(150px);
-  }
-  .cube div:nth-child(5) {
-    transform: rotateX(-90deg) translateZ(150px);
-  }
-  .cube div:nth-child(6) {
-    transform: rotateX(90deg) translateZ(150px);
-  }
-  .cube div:nth-child(7) {
-    transform: rotateX(0deg) translateZ(150px);
-  }
-  .cube div:nth-child(8) {
-    transform: rotateX(180deg) translateZ(150px);
-  }
-  .cube div:nth-child(9) {
-    transform: rotateY(270deg) translateZ(150px);
-  }
-
-  @keyframes rotate {
-    0% { transform: rotateX(0deg) rotateY(0deg); }
-    100% { transform: rotateX(360deg) rotateY(360deg); }
   }
 
   .logo {
@@ -90,17 +56,15 @@
 <body>
 <div class="container">
   <img src="path_to_your_logo_image.png" alt="Logo" class="logo">
-  <div class="cube">
-    <a href="https://www.example.com/page1" target="_blank"><div>Button 1</div></a>
-    <a href="https://www.example.com/page2" target="_blank"><div>Button 2</div></a>
-    <a href="https://www.example.com/page3" target="_blank"><div>Button 3</div></a>
-    <a href="https://www.example.com/page4" target="_blank"><div>Button 4</div></a>
-    <a href="https://www.example.com/page5" target="_blank"><div>Button 5</div></a>
-    <a href="https://www.example.com/page6" target="_blank"><div>Button 6</div></a>
-    <a href="https://www.example.com/page7" target="_blank"><div>Button 7</div></a>
-    <a href="https://www.example.com/page8" target="_blank"><div>Button 8</div></a>
-    <a href="https://www.example.com/page9" target="_blank"><div>Button 9</div></a>
-  </div>
+  <button class="button" onclick="location.href='https://www.example.com/page1'" target="_blank">1</button>
+  <button class="button" onclick="location.href='https://www.example.com/page2'" target="_blank">2</button>
+  <button class="button" onclick="location.href='https://www.example.com/page3'" target="_blank">3</button>
+  <button class="button" onclick="location.href='https://www.example.com/page4'" target="_blank">4</button>
+  <button class="button" onclick="location.href='https://www.example.com/page5'" target="_blank">5</button>
+  <button class="button" onclick="location.href='https://www.example.com/page6'" target="_blank">6</button>
+  <button class="button" onclick="location.href='https://www.example.com/page7'" target="_blank">7</button>
+  <button class="button" onclick="location.href='https://www.example.com/page8'" target="_blank">8</button>
+  <button class="button" onclick="location.href='https://www.example.com/page9'" target="_blank">9</button>
 </div>
 </body>
 </html>
