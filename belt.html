@@ -10,6 +10,19 @@
         font-family: Arial, sans-serif;
         text-align: center;
     }
+    table {
+        width: 80%;
+        border-collapse: collapse;
+        margin: 20px auto;
+    }
+    table, th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
     button {
         background-color: red;
         color: white;
@@ -34,7 +47,7 @@
 <h2>Belt Stocks</h2>
 
 <form id="stockForm">
-    <label for="totalQuantity">Total Quantity (once per day):</label>
+    <label for="totalQuantity">Total Quantity:</label>
     <input type="number" id="totalQuantity" name="totalQuantity">
     <button type="button" onclick="setTotal()">Set Total</button>
     <br>
@@ -42,6 +55,18 @@
     <input type="number" id="inputQuantity" name="inputQuantity">
     <button type="button" onclick="calculate()">Calculate</button>
 </form>
+
+<table id="stockTable">
+    <tr>
+        <th>Date & Time</th>
+        <th>Total Quantity</th>
+        <th>Size 75</th>
+        <th>Size 95</th>
+        <th>Size 115</th>
+        <th>Remaining Quantity</th>
+        <th>Action</th>
+    </tr>
+</table>
 
 <button id="printButton" onclick="printTable()">Print Table</button>
 <button onclick="shareOnWhatsApp()">Share on WhatsApp</button>
@@ -75,30 +100,47 @@
 
     // Function to add a new entry to the table
     function addEntry(dateTime, totalQuantity, size75, size95, size115, remainingQuantity) {
-        var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
-        var newData = {
-            dateTime: dateTime,
-            totalQuantity: totalQuantity,
-            size75: size75,
-            size95: size95,
-            size115: size115,
-            remainingQuantity: remainingQuantity
+        var table = document.getElementById("stockTable");
+        var newRow = table.insertRow(-1);
+        newRow.insertCell().textContent = dateTime;
+        newRow.insertCell().textContent = totalQuantity;
+        newRow.insertCell().textContent = size75;
+        newRow.insertCell().textContent = size95;
+        newRow.insertCell().textContent = size115;
+        newRow.insertCell().textContent = remainingQuantity;
+        var editCell = newRow.insertCell();
+        var editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        editBtn.onclick = function() {
+            editEntry(newRow);
         };
-        data.push(newData);
-        localStorage.setItem("beltStocksData", JSON.stringify(data));
+        editCell.appendChild(editBtn);
     }
 
-    // Function to calculate and add a new entry
-    function calculate() {
-        var totalQuantity = getTotalQuantity();
-        var inputQuantity = parseInt(document.getElementById("inputQuantity").value);
-        var remainingQuantity = calculateRemainingQuantity(totalQuantity, inputQuantity);
-        var size75 = parseInt(prompt("Enter quantity for Size 75:"));
-        var size95 = parseInt(prompt("Enter quantity for Size 95:"));
-        var size115 = parseInt(prompt("Enter quantity for Size 115:"));
-        var dateTime = getCurrentDateTime();
-        addEntry(dateTime, totalQuantity, size75, size95, size115, remainingQuantity);
-        window.location.href = "display_data.html"; // Redirect to the display page
+    // Function to edit an entry
+    function editEntry(row) {
+        var inputQuantity = parseInt(prompt("Enter new input quantity:"));
+        if (!isNaN(inputQuantity)) {
+            var totalQuantity = parseInt(row.cells[1].textContent);
+            var size75 = parseInt(row.cells[2].textContent);
+            var size95 = parseInt(row.cells[3].textContent);
+            var size115 = parseInt(row.cells[4].textContent);
+            var remainingQuantity = calculateRemainingQuantity(totalQuantity, inputQuantity);
+
+            // Update table
+            var dateTime = getCurrentDateTime();
+            row.cells[0].textContent = dateTime;
+            row.cells[5].textContent = remainingQuantity;
+
+            // Update data in local storage
+            var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
+            var rowIndex = row.rowIndex - 1;
+            data[rowIndex].dateTime = dateTime;
+            data[rowIndex].remainingQuantity = remainingQuantity;
+            saveDataToStorage(data);
+        } else {
+            alert("Invalid input quantity!");
+        }
     }
 
     // Function to print the table
@@ -132,6 +174,50 @@
             location.reload();
         }
     }
+
+    // Function to display existing data when the page loads
+    function displayData() {
+        var totalQuantity = getTotalQuantity();
+        var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
+        data.forEach(function(entry) {
+            addEntry(entry.dateTime, entry.totalQuantity, entry.size75, entry.size95, entry.size115, entry.remainingQuantity);
+        });
+    }
+
+    // Function to save data to local storage
+    function saveDataToStorage(data) {
+        localStorage.setItem("beltStocksData", JSON.stringify(data));
+    }
+
+    // Function to calculate and add a new entry
+    function calculate() {
+        var totalQuantity = getTotalQuantity();
+        var inputQuantity = parseInt(document.getElementById("inputQuantity").value);
+        var remainingQuantity = calculateRemainingQuantity(totalQuantity, inputQuantity);
+        var size75 = parseInt(prompt("Enter quantity for Size 75:"));
+        var size95 = parseInt(prompt("Enter quantity for Size 95:"));
+        var size115 = parseInt(prompt("Enter quantity for Size 115:"));
+        var dateTime = getCurrentDateTime();
+
+        // Add entry to table
+        addEntry(dateTime, totalQuantity, size75, size95, size115, remainingQuantity);
+
+        // Save data to local storage
+        var newData = {
+            dateTime: dateTime,
+            totalQuantity: totalQuantity,
+            size75: size75,
+            size95: size95,
+            size115: size115,
+            remainingQuantity: remainingQuantity
+        };
+        var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
+        data.push(newData);
+        saveDataToStorage(data);
+    }
+
+    // Display existing data when the page loads
+    displayData();
 </script>
 
 </body>
