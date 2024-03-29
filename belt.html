@@ -70,7 +70,7 @@
 
 <button id="printButton" onclick="printTable()">Print Table</button>
 <button onclick="shareOnWhatsApp()">Share on WhatsApp</button>
-<button onclick="shareOnGoogleDrive()">Share on Google Drive</button>
+<button onclick="uploadToFTP()">Upload to FTP</button> <!-- Modified button -->
 <button onclick="shareOnGmail()">Share on Gmail</button>
 <button onclick="clearData()">Clear Data</button>
 
@@ -154,10 +154,12 @@
         alert("Sharing on WhatsApp...");
     }
 
-    // Function to share on Google Drive
-    function shareOnGoogleDrive() {
-        // Implement share functionality for Google Drive
-        alert("Sharing on Google Drive...");
+    // Function to upload data to FTP server
+    function uploadToFTP() {
+        var data = JSON.stringify(localStorage.getItem("beltStocksData"));
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "ftp_upload_script.php", true); // Replace with your server-side script URL
+        xhr.send(data);
     }
 
     // Function to share on Gmail
