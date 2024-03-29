@@ -5,9 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Belt Stocks</title>
 <style>
+    body {
+        background-color: skyblue;
+        font-family: Arial, sans-serif;
+    }
     table {
         width: 100%;
         border-collapse: collapse;
+        margin-top: 20px;
     }
     table, th, td {
         border: 1px solid black;
@@ -17,8 +22,13 @@
     th {
         background-color: #f2f2f2;
     }
-    #printButton {
-        margin-top: 10px;
+    button {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
     }
 </style>
 </head>
@@ -38,6 +48,7 @@
 
 <table id="stockTable">
     <tr>
+        <th>Date & Time</th>
         <th>Total Quantity</th>
         <th>Size 75</th>
         <th>Size 95</th>
@@ -48,6 +59,9 @@
 </table>
 
 <button id="printButton" onclick="printTable()">Print Table</button>
+<button onclick="shareOnWhatsApp()">Share on WhatsApp</button>
+<button onclick="shareOnGoogleDrive()">Share on Google Drive</button>
+<button onclick="shareOnGmail()">Share on Gmail</button>
 
 <script>
     // Function to set the total quantity
@@ -67,10 +81,17 @@
         return totalQuantity - inputQuantity;
     }
 
+    // Function to get current date and time
+    function getCurrentDateTime() {
+        var now = new Date();
+        return now.toLocaleString();
+    }
+
     // Function to add a new entry to the table
-    function addEntry(totalQuantity, size75, size95, size115, remainingQuantity) {
+    function addEntry(dateTime, totalQuantity, size75, size95, size115, remainingQuantity) {
         var table = document.getElementById("stockTable");
         var newRow = table.insertRow(-1);
+        newRow.insertCell().textContent = dateTime;
         newRow.insertCell().textContent = totalQuantity;
         newRow.insertCell().textContent = size75;
         newRow.insertCell().textContent = size95;
@@ -89,26 +110,23 @@
     function editEntry(row) {
         var inputQuantity = parseInt(prompt("Enter new input quantity:"));
         if (!isNaN(inputQuantity)) {
-            var totalQuantity = parseInt(row.cells[0].textContent);
-            var size75 = parseInt(row.cells[1].textContent);
-            var size95 = parseInt(row.cells[2].textContent);
-            var size115 = parseInt(row.cells[3].textContent);
+            var totalQuantity = parseInt(row.cells[1].textContent);
+            var size75 = parseInt(row.cells[2].textContent);
+            var size95 = parseInt(row.cells[3].textContent);
+            var size115 = parseInt(row.cells[4].textContent);
             var remainingQuantity = calculateRemainingQuantity(totalQuantity, inputQuantity);
 
             // Update table
-            var size = prompt("Enter the size (75, 95, 115):");
-            if (size === "75") {
-                row.cells[1].textContent = size75 + inputQuantity;
-            } else if (size === "95") {
-                row.cells[2].textContent = size95 + inputQuantity;
-            } else if (size === "115") {
-                row.cells[3].textContent = size115 + inputQuantity;
-            } else {
-                alert("Invalid size!");
-                return;
-            }
-            row.cells[0].textContent = totalQuantity;
-            row.cells[4].textContent = remainingQuantity;
+            var dateTime = getCurrentDateTime();
+            row.cells[0].textContent = dateTime;
+            row.cells[5].textContent = remainingQuantity;
+
+            // Update data in local storage
+            var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
+            var rowIndex = row.rowIndex - 1;
+            data[rowIndex].dateTime = dateTime;
+            data[rowIndex].remainingQuantity = remainingQuantity;
+            saveDataToStorage(data);
         } else {
             alert("Invalid input quantity!");
         }
@@ -119,12 +137,30 @@
         window.print();
     }
 
+    // Function to share on WhatsApp
+    function shareOnWhatsApp() {
+        // Implement share functionality for WhatsApp
+        alert("Sharing on WhatsApp...");
+    }
+
+    // Function to share on Google Drive
+    function shareOnGoogleDrive() {
+        // Implement share functionality for Google Drive
+        alert("Sharing on Google Drive...");
+    }
+
+    // Function to share on Gmail
+    function shareOnGmail() {
+        // Implement share functionality for Gmail
+        alert("Sharing on Gmail...");
+    }
+
     // Function to display existing data when the page loads
     function displayData() {
         var totalQuantity = getTotalQuantity();
         var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
         data.forEach(function(entry) {
-            addEntry(entry.totalQuantity, entry.size75, entry.size95, entry.size115, entry.remainingQuantity);
+            addEntry(entry.dateTime, entry.totalQuantity, entry.size75, entry.size95, entry.size115, entry.remainingQuantity);
         });
     }
 
@@ -141,12 +177,14 @@
         var size75 = parseInt(prompt("Enter quantity for Size 75:"));
         var size95 = parseInt(prompt("Enter quantity for Size 95:"));
         var size115 = parseInt(prompt("Enter quantity for Size 115:"));
+        var dateTime = getCurrentDateTime();
 
         // Add entry to table
-        addEntry(totalQuantity, size75, size95, size115, remainingQuantity);
+        addEntry(dateTime, totalQuantity, size75, size95, size115, remainingQuantity);
 
         // Save data to local storage
         var newData = {
+            dateTime: dateTime,
             totalQuantity: totalQuantity,
             size75: size75,
             size95: size95,
@@ -164,4 +202,3 @@
 
 </body>
 </html>
-
