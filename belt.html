@@ -86,49 +86,14 @@
         const remainingQuantity = totalQuantity - inputQuantity;
         const dateTime = new Date().toLocaleString();
 
-        // Add data to IndexedDB
-        const request = window.indexedDB.open("beltStocksDB", 1);
-
-        request.onerror = function(event) {
-            console.log("Database error: " + event.target.errorCode);
-        };
-
-        request.onupgradeneeded = function(event) {
-            const db = event.target.result;
-            const objectStore = db.createObjectStore("beltStocks", { keyPath: "id", autoIncrement: true });
-            objectStore.createIndex("dateTime", "dateTime", { unique: false });
-            objectStore.createIndex("totalQuantity", "totalQuantity", { unique: false });
-            // Create indexes for sizes 75, 95, and 115
-            objectStore.createIndex("inputQuantity", "inputQuantity", { unique: false });
-            objectStore.createIndex("remainingQuantity", "remainingQuantity", { unique: false });
-        };
-
-        request.onsuccess = function(event) {
-            const db = event.target.result;
-            const transaction = db.transaction("beltStocks", "readwrite");
-            const objectStore = transaction.objectStore("beltStocks");
-            const newItem = {
-                dateTime: dateTime,
-                totalQuantity: totalQuantity,
-                // Add data for sizes 75, 95, and 115
-                inputQuantity: inputQuantity,
-                remainingQuantity: remainingQuantity
-            };
-            const requestAdd = objectStore.add(newItem);
-
-            requestAdd.onerror = function(event) {
-                console.log("Error adding data: " + event.target.errorCode);
-            };
-
-            requestAdd.onsuccess = function(event) {
-                console.log("Data added successfully");
-            };
-
-            transaction.oncomplete = function() {
-                db.close();
-                displayData();
-            };
-        };
+        // Add row to table
+        const table = document.getElementById("stockTable");
+        const newRow = table.insertRow(-1);
+        newRow.insertCell().textContent = dateTime;
+        newRow.insertCell().textContent = totalQuantity;
+        // Add cells for sizes 75, 95, and 115
+        newRow.insertCell().textContent = inputQuantity;
+        newRow.insertCell().textContent = remainingQuantity;
 
         // Save data to local storage
         const data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
@@ -141,48 +106,6 @@
         });
         localStorage.setItem("beltStocksData", JSON.stringify(data));
     }
-
-    // Function to display data
-    function displayData() {
-        const table = document.getElementById("stockTable");
-        table.innerHTML = "<tr><th>Date & Time</th><th>Total Quantity</th><th>Size 75</th><th>Size 95</th><th>Size 115</th><th>Input Quantity</th><th>Remaining Quantity</th></tr>";
-
-        const request = window.indexedDB.open("beltStocksDB", 1);
-
-        request.onerror = function(event) {
-            console.log("Database error: " + event.target.errorCode);
-        };
-
-        request.onsuccess = function(event) {
-            const db = event.target.result;
-            const transaction = db.transaction("beltStocks", "readonly");
-            const objectStore = transaction.objectStore("beltStocks");
-            const requestGetAll = objectStore.getAll();
-
-            requestGetAll.onerror = function(event) {
-                console.log("Error getting data: " + event.target.errorCode);
-            };
-
-            requestGetAll.onsuccess = function(event) {
-                const data = event.target.result;
-                data.forEach(function(item) {
-                    const row = table.insertRow(-1);
-                    row.insertCell().textContent = item.dateTime;
-                    row.insertCell().textContent = item.totalQuantity;
-                    // Add cells for sizes 75, 95, and 115
-                    row.insertCell().textContent = item.inputQuantity;
-                    row.insertCell().textContent = item.remainingQuantity;
-                });
-            };
-
-            transaction.oncomplete = function() {
-                db.close();
-            };
-        };
-    }
-
-    // Call displayData function when the page loads
-    displayData();
 
     // Function to print the table
     function printTable() {
@@ -211,16 +134,8 @@
     function clearData() {
         if (confirm("Are you sure you want to clear all data?")) {
             localStorage.removeItem("beltStocksData");
-            const request = window.indexedDB.deleteDatabase("beltStocksDB");
-
-            request.onerror = function(event) {
-                console.log("Database deletion error: " + event.target.errorCode);
-            };
-
-            request.onsuccess = function(event) {
-                console.log("Database cleared successfully");
-                displayData();
-            };
+            const table = document.getElementById("stockTable");
+            table.innerHTML = "<tr><th>Date & Time</th><th>Total Quantity</th><th>Size 75</th><th>Size 95</th><th>Size 115</th><th>Input Quantity</th><th>Remaining Quantity</th></tr>";
         }
     }
 </script>
