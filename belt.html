@@ -67,6 +67,7 @@
         <th>Size 115</th>
         <th>Input Quantity</th>
         <th>Remaining Quantity</th>
+        <th>Action</th>
     </tr>
 </table>
 
@@ -94,17 +95,42 @@
         // Add cells for sizes 75, 95, and 115
         newRow.insertCell().textContent = inputQuantity;
         newRow.insertCell().textContent = remainingQuantity;
+        newRow.insertCell().innerHTML = '<button onclick="editEntry(this.parentNode.parentNode)">Edit</button>';
 
         // Save data to local storage
         const data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
         data.push({
             dateTime: dateTime,
             totalQuantity: totalQuantity,
-            // Add data for sizes 75, 95, and 115
             inputQuantity: inputQuantity,
             remainingQuantity: remainingQuantity
         });
         localStorage.setItem("beltStocksData", JSON.stringify(data));
+    }
+
+    // Function to edit an entry
+    function editEntry(row) {
+        const inputQuantity = parseInt(prompt("Enter new input quantity:"));
+        if (!isNaN(inputQuantity)) {
+            const totalQuantity = parseInt(row.cells[1].textContent);
+            const remainingQuantity = totalQuantity - inputQuantity;
+            const dateTime = new Date().toLocaleString();
+
+            // Update table
+            row.cells[0].textContent = dateTime;
+            row.cells[4].textContent = inputQuantity;
+            row.cells[5].textContent = remainingQuantity;
+
+            // Update data in local storage
+            const data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
+            const rowIndex = Array.from(row.parentNode.children).indexOf(row) - 1;
+            data[rowIndex].dateTime = dateTime;
+            data[rowIndex].inputQuantity = inputQuantity;
+            data[rowIndex].remainingQuantity = remainingQuantity;
+            localStorage.setItem("beltStocksData", JSON.stringify(data));
+        } else {
+            alert("Invalid input quantity!");
+        }
     }
 
     // Function to print the table
@@ -135,9 +161,27 @@
         if (confirm("Are you sure you want to clear all data?")) {
             localStorage.removeItem("beltStocksData");
             const table = document.getElementById("stockTable");
-            table.innerHTML = "<tr><th>Date & Time</th><th>Total Quantity</th><th>Size 75</th><th>Size 95</th><th>Size 115</th><th>Input Quantity</th><th>Remaining Quantity</th></tr>";
+            table.innerHTML = "<tr><th>Date & Time</th><th>Total Quantity</th><th>Size 75</th><th>Size 95</th><th>Size 115</th><th>Input Quantity</th><th>Remaining Quantity</th><th>Action</th></tr>";
         }
     }
+
+    // Function to display existing data when the page loads
+    function displayData() {
+        const data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
+        const table = document.getElementById("stockTable");
+        data.forEach(entry => {
+            const newRow = table.insertRow(-1);
+            newRow.insertCell().textContent = entry.dateTime;
+            newRow.insertCell().textContent = entry.totalQuantity;
+            // Add cells for sizes 75, 95, and 115
+            newRow.insertCell().textContent = entry.inputQuantity;
+            newRow.insertCell().textContent = entry.remainingQuantity;
+            newRow.insertCell().innerHTML = '<button onclick="editEntry(this.parentNode.parentNode)">Edit</button>';
+        });
+    }
+
+    // Display existing data when the page loads
+    displayData();
 </script>
 
 </body>
