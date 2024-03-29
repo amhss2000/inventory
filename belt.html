@@ -55,7 +55,7 @@
     <input type="number" id="input" name="input" value="" required><br>
     <label for="remaining">Remaining Quantity:</label>
     <input type="number" id="remaining" name="remaining" value="" readonly><br>
-    <input type="submit"onclick="window.location.href = 'permissionsubmit.html' value="Submit">
+    <input type="submit" value="Submit">
   </form>
 
   <script>
@@ -68,7 +68,7 @@
       const remainingQuantity = totalQuantity - inputQuantity;
 
       // Construct URL with parameters
-      const url = `https://docs.google.com/forms/d/e/1FAIpQLSdVGZZh5a8dywmpk-vX1Tvoq7dgFUSx0gNEVcjBSKJu4HzRIQ/viewform?usp=pp_url&entry.1895844902=${totalQuantity}&entry.443251096=${inputQuantity}&entry.1177619146=${remainingQuantity}`;
+      const url = `https://docs.google.com/forms/d/e/1FAIpQLSdVGZZh5a8dywmpk-vX1Tvoq7dgFUSx0gNEVcjBSKJu4HzRIQ/viewform?usp=pp_url&entry.1895844902=${totalQuantity}&entry.443251096=${inputQuantity}&entry.1177619146=${re}`;
 
       // Open Google Form in a new tab
       window.open(url, '_blank');
