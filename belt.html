@@ -42,7 +42,6 @@
 </head>
 <body>
 
-
 <img src="logo.png" id="logo" alt="Company Logo">
 
 <h2>Belt Stocks</h2>
@@ -221,47 +220,6 @@
 
     // Display existing data when the page loads
     displayData();
-
-<script>
-// Establish a connection between peers using WebRTC
-const peerConnection = new RTCPeerConnection();
-
-// Create a data channel for communication
-const dataChannel = peerConnection.createDataChannel('stockDataChannel');
-
-// Event listener for receiving messages
-dataChannel.onmessage = function(event) {
-    const receivedData = JSON.parse(event.data);
-    // Update the table with received data
-    updateTable(receivedData);
-};
-
-// Function to update the table with received data
-function updateTable(data) {
-    // Update the table with the received data
-}
-
-// Function to broadcast data to other peers
-function broadcastData(data) {
-    // Convert data to JSON string
-    const jsonData = JSON.stringify(data);
-    // Send data through the data channel
-    dataChannel.send(jsonData);
-}
-
-// Function to handle user input and trigger data broadcast
-function handleInputAndUpdateTable() {
-    // Handle user input and calculate remaining quantity
-    const data = {
-        // Populate with user input data
-    };
-    // Update the table locally
-    updateTable(data);
-    // Broadcast the updated data to other peers
-    broadcastData(data);
-}
-
-// Add event listeners to relevant elements/buttons
 </script>
 
 </body>
