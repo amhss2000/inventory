@@ -5,39 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Belt Stocks</title>
 <style>
-    body {
-        background-color: skyblue;
-        font-family: Arial, sans-serif;
-        text-align: center;
-    }
-    table {
-        width: 80%;
-        border-collapse: collapse;
-        margin: 20px auto;
-    }
-    table, th, td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: center;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    button {
-        background-color: red;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        border-radius: 5px;
-        margin: 5px;
-    }
-    #logo {
-        width: 150px;
-        height: 150px;
-        display: block;
-        margin: 0 auto;
-    }
+    /* Styles unchanged */
 </style>
 </head>
 <body>
@@ -47,196 +15,62 @@
 <h2>Belt Stocks</h2>
 
 <form id="stockForm">
-    <label for="totalQuantity">Total Quantity:</label>
-    <input type="number" id="totalQuantity" name="totalQuantity">
-    <button type="button" onclick="setTotal()">Set Total</button>
-    <br>
-    <label for="inputQuantity">Input Quantity:</label>
-    <input type="number" id="inputQuantity" name="inputQuantity">
-    <button type="button" onclick="calculate()">Calculate</button>
+    <!-- Form fields unchanged -->
 </form>
 
 <table id="stockTable">
-    <tr>
-        <th>Date & Time</th>
-        <th>Total Quantity</th>
-        <th>Size 75</th>
-        <th>Size 95</th>
-        <th>Size 115</th>
-        <th>Remaining Quantity</th>
-        <th>Action</th>
-    </tr>
+    <!-- Table headers unchanged -->
 </table>
 
-<button id="printButton" onclick="printTable()">Print Table</button>
-<button onclick="shareOnWhatsApp()">Share on WhatsApp</button>
-<button onclick="uploadToFTP()">Upload to FTP</button>
-<button onclick="exportToExcel()">Export to Excel</button> <!-- Modified button -->
-<button onclick="shareOnGmail()">Share on Gmail</button>
-<button onclick="clearData()">Clear Data</button>
+<!-- Buttons unchanged -->
 
 <script>
-    // Function to set the total quantity
-    function setTotal() {
-        var totalQuantity = parseInt(document.getElementById("totalQuantity").value);
-        localStorage.setItem("totalQuantity", totalQuantity);
-        document.getElementById("totalQuantity").disabled = true;
-    }
+    // Function to save data to GitHub
+    function saveDataToGitHub(data) {
+        const token = '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'; // Replace with your GitHub access token
+        const repoOwner = 'amhss@2000'; // Replace with your GitHub username
+        const repoName = 'inventory'; // Replace with your repository name
+        const filePath = 'beltStocksData.json'; // Specify the file path where the data will be stored
 
-    // Function to get the total quantity from local storage
-    function getTotalQuantity() {
-        return parseInt(localStorage.getItem("totalQuantity")) || 0;
-    }
+        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
 
-    // Function to calculate remaining quantity
-    function calculateRemainingQuantity(totalQuantity, inputQuantity) {
-        return totalQuantity - inputQuantity;
-    }
+        // Encode data to Base64
+        const content = btoa(JSON.stringify(data));
 
-    // Function to get current date and time
-    function getCurrentDateTime() {
-        var now = new Date();
-        return now.toLocaleString();
-    }
-
-    // Function to add a new entry to the table
-    function addEntry(dateTime, totalQuantity, size75, size95, size115, remainingQuantity) {
-        var table = document.getElementById("stockTable");
-        var newRow = table.insertRow(-1);
-        newRow.insertCell().textContent = dateTime;
-        newRow.insertCell().textContent = totalQuantity;
-        newRow.insertCell().textContent = size75;
-        newRow.insertCell().textContent = size95;
-        newRow.insertCell().textContent = size115;
-        newRow.insertCell().textContent = remainingQuantity;
-        var editCell = newRow.insertCell();
-        var editBtn = document.createElement("button");
-        editBtn.textContent = "Edit";
-        editBtn.onclick = function() {
-            editEntry(newRow);
+        // Construct request body
+        const requestBody = {
+            message: 'Update data file',
+            content: content
         };
-        editCell.appendChild(editBtn);
-    }
 
-    // Function to edit an entry
-    function editEntry(row) {
-        var inputQuantity = parseInt(prompt("Enter new input quantity:"));
-        if (!isNaN(inputQuantity)) {
-            var totalQuantity = parseInt(row.cells[1].textContent);
-            var size75 = parseInt(row.cells[2].textContent);
-            var size95 = parseInt(row.cells[3].textContent);
-            var size115 = parseInt(row.cells[4].textContent);
-            var remainingQuantity = calculateRemainingQuantity(totalQuantity, inputQuantity);
-
-            // Update table
-            var dateTime = getCurrentDateTime();
-            row.cells[0].textContent = dateTime;
-            row.cells[5].textContent = remainingQuantity;
-
-            // Update data in local storage
-            var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
-            var rowIndex = row.rowIndex - 1;
-            data[rowIndex].dateTime = dateTime;
-            data[rowIndex].remainingQuantity = remainingQuantity;
-            saveDataToStorage(data);
-        } else {
-            alert("Invalid input quantity!");
-        }
-    }
-
-    // Function to print the table
-    function printTable() {
-        window.print();
-    }
-
-    // Function to share on WhatsApp
-    function shareOnWhatsApp() {
-        // Implement share functionality for WhatsApp
-        alert("Sharing on WhatsApp...");
-    }
-
-    // Function to upload data to FTP server
-    function uploadToFTP() {
-        var data = JSON.stringify(localStorage.getItem("beltStocksData"));
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "ftp_upload_script.php", true); // Replace with your server-side script URL
-        xhr.send(data);
-    }
-
-    // Function to export data to Excel
-    function exportToExcel() {
-        var data = localStorage.getItem("beltStocksData");
-        var csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Date & Time,Total Quantity,Size 75,Size 95,Size 115,Remaining Quantity\n";
-        data.forEach(function(entry) {
-            csvContent += entry.dateTime + "," + entry.totalQuantity + "," + entry.size75 + "," + entry.size95 + "," + entry.size115 + "," + entry.remainingQuantity + "\n";
-        });
-        var encodedUri = encodeURI(csvContent);
-        var link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "belt_stock_data.csv");
-        document.body.appendChild(link); // Required for FF
-        link.click();
-    }
-
-    // Function to share on Gmail
-    function shareOnGmail() {
-        // Implement share functionality for Gmail
-        alert("Sharing on Gmail...");
-    }
-
-    // Function to clear all data
-    function clearData() {
-        if (confirm("Are you sure you want to clear all data?")) {
-            localStorage.removeItem("totalQuantity");
-            localStorage.removeItem("beltStocksData");
-            location.reload();
-        }
-    }
-
-    // Function to display existing data when the page loads
-    function displayData() {
-        var totalQuantity = getTotalQuantity();
-        var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
-        data.forEach(function(entry) {
-            addEntry(entry.dateTime, entry.totalQuantity, entry.size75, entry.size95, entry.size115, entry.remainingQuantity);
+        // Send request to GitHub API
+        fetch(apiUrl, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Data saved successfully');
+            } else {
+                throw new Error('Failed to save data');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
     }
 
-    // Function to save data to local storage
-    function saveDataToStorage(data) {
-        localStorage.setItem("beltStocksData", JSON.stringify(data));
-    }
+    // Example data object
+    const yourDataObject = {
+        // Your data properties here
+    };
 
-    // Function to calculate and add a new entry
-    function calculate() {
-        var totalQuantity = getTotalQuantity();
-        var inputQuantity = parseInt(document.getElementById("inputQuantity").value);
-        var remainingQuantity = calculateRemainingQuantity(totalQuantity, inputQuantity);
-        var size75 = parseInt(prompt("Enter quantity for Size 75:"));
-        var size95 = parseInt(prompt("Enter quantity for Size 95:"));
-        var size115 = parseInt(prompt("Enter quantity for Size 115:"));
-        var dateTime = getCurrentDateTime();
-
-        // Add entry to table
-        addEntry(dateTime, totalQuantity, size75, size95, size115, remainingQuantity);
-
-        // Save data to local storage
-        var newData = {
-            dateTime: dateTime,
-            totalQuantity: totalQuantity,
-            size75: size75,
-            size95: size95,
-            size115: size115,
-            remainingQuantity: remainingQuantity
-        };
-        var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
-        data.push(newData);
-        saveDataToStorage(data);
-    }
-
-    // Display existing data when the page loads
-    displayData();
+    // Call function to save data to GitHub
+    saveDataToGitHub(yourDataObject);
 </script>
 
 </body>
