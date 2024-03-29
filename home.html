@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Button Curved Grid</title>
+<title>Curved Buttons Grid</title>
 <style>
   body {
     margin: 0;
@@ -17,27 +17,24 @@
   }
 
   .container {
+    position: relative;
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative;
   }
 
   .button {
     width: 80px;
     height: 80px;
-    margin: 10px;
+    margin: 5px;
     background-color: #3498db;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
+    font-size: 16px;
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -45,9 +42,9 @@
 
   .logo {
     position: absolute;
-    top: 50%;
+    top: -50px; /* Adjust this value to position the logo */
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     width: 150px;
     height: auto;
   }
