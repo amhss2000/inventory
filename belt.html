@@ -63,7 +63,7 @@
       // Retrieve values from input fields
       
       const inputQuantity = parseInt(document.getElementById('input').value);
-      const remainingQuantity = totalQuantity - inputQuantity;
+     
 
       // Construct URL with parameters
       const url = `https://docs.google.com/forms/d/e/1FAIpQLSdVGZZh5a8dywmpk-vX1Tvoq7dgFUSx0gNEVcjBSKJu4HzRIQ/viewform?usp=pp_url&entry.443251096=${inputQuantity}`;
@@ -72,13 +72,9 @@
       window.open(url, '_blank');
     });
 
-    // Update remaining quantity when input quantity is changed
-    document.getElementById('input').addEventListener('input', function() {
-    
-      const inputQuantity = parseInt(this.value);
-    
+   
       
-    });
+    ;
   </script>
 </body>
 </html>
