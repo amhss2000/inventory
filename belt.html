@@ -76,26 +76,7 @@
 <button onclick="shareOnGmail()">Share on Gmail</button>
 <button onclick="clearData()">Clear Data</button>
 
-<!-- Firebase JavaScript library -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
 <script>
-    // Firebase configuration
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        databaseURL: "YOUR_DATABASE_URL",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-
     // Function to submit data
     function submitData() {
         const totalQuantity = document.getElementById("totalQuantity").value;
@@ -105,33 +86,88 @@
         const remainingQuantity = totalQuantity - inputQuantity;
         const dateTime = new Date().toLocaleString();
 
-        // Push data to Firebase
-        database.ref("beltStocks").push({
-            dateTime: dateTime,
-            totalQuantity: totalQuantity,
-            // Add data for sizes 75, 95, and 115
-            inputQuantity: inputQuantity,
-            remainingQuantity: remainingQuantity
-        });
+        // Add data to IndexedDB
+        const request = window.indexedDB.open("beltStocksDB", 1);
 
-        // Reset form
-        document.getElementById("stockForm").reset();
+        request.onerror = function(event) {
+            console.log("Database error: " + event.target.errorCode);
+        };
+
+        request.onupgradeneeded = function(event) {
+            const db = event.target.result;
+            const objectStore = db.createObjectStore("beltStocks", { keyPath: "id", autoIncrement: true });
+            objectStore.createIndex("dateTime", "dateTime", { unique: false });
+            objectStore.createIndex("totalQuantity", "totalQuantity", { unique: false });
+            // Create indexes for sizes 75, 95, and 115
+            objectStore.createIndex("inputQuantity", "inputQuantity", { unique: false });
+            objectStore.createIndex("remainingQuantity", "remainingQuantity", { unique: false });
+        };
+
+        request.onsuccess = function(event) {
+            const db = event.target.result;
+            const transaction = db.transaction("beltStocks", "readwrite");
+            const objectStore = transaction.objectStore("beltStocks");
+            const newItem = {
+                dateTime: dateTime,
+                totalQuantity: totalQuantity,
+                // Add data for sizes 75, 95, and 115
+                inputQuantity: inputQuantity,
+                remainingQuantity: remainingQuantity
+            };
+            const requestAdd = objectStore.add(newItem);
+
+            requestAdd.onerror = function(event) {
+                console.log("Error adding data: " + event.target.errorCode);
+            };
+
+            requestAdd.onsuccess = function(event) {
+                console.log("Data added successfully");
+            };
+
+            transaction.oncomplete = function() {
+                db.close();
+                displayData();
+            };
+        };
     }
 
     // Function to display data
     function displayData() {
         const table = document.getElementById("stockTable");
+        table.innerHTML = "<tr><th>Date & Time</th><th>Total Quantity</th><th>Size 75</th><th>Size 95</th><th>Size 115</th><th>Input Quantity</th><th>Remaining Quantity</th></tr>";
 
-        // Listen for changes in Firebase database
-        database.ref("beltStocks").on("child_added", snapshot => {
-            const data = snapshot.val();
-            const row = table.insertRow(-1);
-            row.insertCell().textContent = data.dateTime;
-            row.insertCell().textContent = data.totalQuantity;
-            // Add cells for sizes 75, 95, and 115
-            row.insertCell().textContent = data.inputQuantity;
-            row.insertCell().textContent = data.remainingQuantity;
-        });
+        const request = window.indexedDB.open("beltStocksDB", 1);
+
+        request.onerror = function(event) {
+            console.log("Database error: " + event.target.errorCode);
+        };
+
+        request.onsuccess = function(event) {
+            const db = event.target.result;
+            const transaction = db.transaction("beltStocks", "readonly");
+            const objectStore = transaction.objectStore("beltStocks");
+            const requestGetAll = objectStore.getAll();
+
+            requestGetAll.onerror = function(event) {
+                console.log("Error getting data: " + event.target.errorCode);
+            };
+
+            requestGetAll.onsuccess = function(event) {
+                const data = event.target.result;
+                data.forEach(function(item) {
+                    const row = table.insertRow(-1);
+                    row.insertCell().textContent = item.dateTime;
+                    row.insertCell().textContent = item.totalQuantity;
+                    // Add cells for sizes 75, 95, and 115
+                    row.insertCell().textContent = item.inputQuantity;
+                    row.insertCell().textContent = item.remainingQuantity;
+                });
+            };
+
+            transaction.oncomplete = function() {
+                db.close();
+            };
+        };
     }
 
     // Call displayData function when the page loads
@@ -163,10 +199,16 @@
     // Function to clear all data
     function clearData() {
         if (confirm("Are you sure you want to clear all data?")) {
-            // Remove all data from Firebase database
-            database.ref("beltStocks").remove();
-            // Clear the table
-            document.getElementById("stockTable").innerHTML = "<tr><th>Date & Time</th><th>Total Quantity</th><th>Size 75</th><th>Size 95</th><th>Size 115</th><th>Input Quantity</th><th>Remaining Quantity</th></tr>";
+            const request = window.indexedDB.deleteDatabase("beltStocksDB");
+
+            request.onerror = function(event) {
+                console.log("Error clearing database: " + event.target.errorCode);
+            };
+
+            request.onsuccess = function(event) {
+                console.log("Database cleared successfully");
+                displayData();
+            };
         }
     }
 </script>
