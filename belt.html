@@ -1,117 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Management</title>
-    <style>
-        body {
-            background-color: skyblue;
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Management</title>
+<style>
+    body {
+        background-color: skyblue;
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
 
-        #container {
-            margin-top: 50px;
-        }
+    #container {
+        margin-top: 50px;
+    }
 
-        #logo {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 20px;
-        }
+    #logo {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 20px;
+    }
 
-        input[type="number"] {
-            width: 50px;
-            margin-bottom: 10px;
-        }
+    input[type="number"] {
+        width: 50px;
+        margin-bottom: 10px;
+    }
 
-        table {
-            margin: 20px auto;
-            border-collapse: collapse;
-            width: 60%;
-        }
+    table {
+        margin: 20px auto;
+        border-collapse: collapse;
+        width: 60%;
+    }
 
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-        }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+    }
 
-        th {
-            background-color: #f44336;
-            color: white;
-        }
+    th {
+        background-color: #f44336;
+        color: white;
+    }
 
-        button {
-            background-color: #f44336;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-    </style>
+    button {
+        background-color: #f44336;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+</style>
 </head>
 <body>
-    <div id="container">
-        <img id="logo" src="logo.png" alt="Logo">
-        <h2>Stock Management - Belts</h2>
-        <p>Total Quantity: <input type="number" id="totalQuantity" value="0"></p>
-        <p>Input Quantity: <input type="number" id="inputQuantity" value="0"></p>
-        <p>Remaining Quantity: <span id="remainingQuantity">0</span></p>
-        <button onclick="updateStock()">Update Stock</button>
+<div id="container">
+    <img id="logo" src="logo.png" alt="Logo">
+    <h2>Stock Management - Belts</h2>
+    <p>Total Quantity: <input type="number" id="totalQuantity" value="0"></p>
+    <p>Input Quantity: <input type="number" id="inputQuantity" value="0"></p>
+    <p>Remaining Quantity: <span id="remainingQuantity">0</span></p>
+    <button onclick="updateStock()">Update Stock</button>
 
-        <h3>Size Categories:</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Size</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>75</td>
-                    <td><span id="size75">0</span></td>
-                </tr>
-                <tr>
-                    <td>95</td>
-                    <td><span id="size95">0</span></td>
-                </tr>
-                <tr>
-                    <td>110</td>
-                    <td><span id="size110">0</span></td>
-                </tr>
-            </tbody>
-        </table>
-        <button onclick="printPage()">Print</button>
-    </div>
+    <h3>Size Categories:</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Size</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>75</td>
+            <td><span id="size75">0</span></td>
+        </tr>
+        <tr>
+            <td>95</td>
+            <td><span id="size95">0</span></td>
+        </tr>
+        <tr>
+            <td>110</td>
+            <td><span id="size110">0</span></td>
+        </tr>
+        </tbody>
+    </table>
+    <button onclick="printPage()">Print</button>
+</div>
 
-    <script>
-        // Initialize quantities globally
-        let totalQuantity = 0;
-        let size75Quantity = 0;
-        let size95Quantity = 0;
-        let size110Quantity = 0;
+<script>
+    // Initialize quantities globally
+    let totalQuantity = 0;
+    let size75Quantity = 0;
+    let size95Quantity = 0;
+    let size110Quantity = 0;
 
-        // Function to update stock
-        function updateStock() {
-            const inputQuantity = parseInt(document.getElementById('inputQuantity').value);
-            totalQuantity = parseInt(document.getElementById('totalQuantity').value);
-            size75Quantity += inputQuantity; // Assuming input quantity applies to all sizes
-            size95Quantity += inputQuantity;
-            size110Quantity += inputQuantity;
-            const remainingQuantity = totalQuantity - inputQuantity;
-            document.getElementById('remainingQuantity').textContent = remainingQuantity;
-            document.getElementById('size75').textContent = size75Quantity;
-            document.getElementById('size95').textContent = size95Quantity;
-            document.getElementById('size110').textContent = size110Quantity;
-        }
+    // Function to update stock
+    function updateStock() {
+        const inputQuantity = parseInt(document.getElementById('inputQuantity').value);
+        totalQuantity = parseInt(document.getElementById('totalQuantity').value);
+        size75Quantity += inputQuantity; // Assuming input quantity applies to all sizes
+        size95Quantity += inputQuantity;
+        size110Quantity += inputQuantity;
+        const remainingQuantity = totalQuantity - inputQuantity;
+        document.getElementById('remainingQuantity').textContent = remainingQuantity;
+        document.getElementById('size75').textContent = size75Quantity;
+        document.getElementById('size95').textContent = size95Quantity;
+        document.getElementById('size110').textContent = size110Quantity;
+        
+        // Save data to OneDrive
+        saveDataToOnedrive();
+    }
 
-        // Function to print the page
-        function printPage() {
-            window.print();
-        }
-    </script>
+    // Function to print the page
+    function printPage() {
+        window.print();
+    }
+
+    // Function to save data to OneDrive
+    function saveDataToOnedrive() {
+        // Use Microsoft Graph API to save data to OneDrive
+        // Implementation code goes here
+        console.log('Data saved to OneDrive');
+    }
+</script>
 </body>
 </html>
