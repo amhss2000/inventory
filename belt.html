@@ -221,17 +221,8 @@
         data.push(newData);
         saveDataToStorage(data);
     }
-    function uploadToGoogleSheets() {
-    var data = JSON.stringify(localStorage.getItem("beltStocksData"));
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://script.google.com/macros/s/AKfycbx3gM7mAP0q4_vroPb22tIF5dBvHkfleUY8xhdVKdx37DOgyhV7hHfV4TdhyqeRguYw/exec", true); // Replace with your deployed web app URL
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            alert(xhr.responseText); // Show response from server
-        }
-    };
-    xhr.send(data);
+
+  
 }
 
 
