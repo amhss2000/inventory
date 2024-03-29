@@ -87,12 +87,26 @@
     <button onclick="printPage()">Print</button>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     // Initialize quantities globally
     let totalQuantity = 0;
     let size75Quantity = 0;
     let size95Quantity = 0;
     let size110Quantity = 0;
+
+    // Load data from OneDrive when the page loads
+    $(document).ready(function() {
+        // Implementation to load data from OneDrive
+        // For simplicity, let's assume data is loaded asynchronously
+        // and update the global variables accordingly
+        // Example:
+        totalQuantity = 100;
+        size75Quantity = 20;
+        size95Quantity = 40;
+        size110Quantity = 40;
+        updateUI();
+    });
 
     // Function to update stock
     function updateStock() {
@@ -101,14 +115,17 @@
         size75Quantity += inputQuantity; // Assuming input quantity applies to all sizes
         size95Quantity += inputQuantity;
         size110Quantity += inputQuantity;
-        const remainingQuantity = totalQuantity - inputQuantity;
-        document.getElementById('remainingQuantity').textContent = remainingQuantity;
+        updateUI();
+        // Save data to OneDrive
+        saveDataToOnedrive();
+    }
+
+    // Function to update UI with new data
+    function updateUI() {
+        document.getElementById('remainingQuantity').textContent = totalQuantity - size75Quantity - size95Quantity - size110Quantity;
         document.getElementById('size75').textContent = size75Quantity;
         document.getElementById('size95').textContent = size95Quantity;
         document.getElementById('size110').textContent = size110Quantity;
-        
-        // Save data to OneDrive
-        saveDataToOnedrive();
     }
 
     // Function to print the page
@@ -118,8 +135,9 @@
 
     // Function to save data to OneDrive
     function saveDataToOnedrive() {
-        // Use Microsoft Graph API to save data to OneDrive
-        // Implementation code goes here
+        // Implementation to save data to OneDrive using Microsoft Graph API
+        // For simplicity, let's assume data is saved asynchronously
+        // Example:
         console.log('Data saved to OneDrive');
     }
 </script>
