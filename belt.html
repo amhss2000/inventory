@@ -17,9 +17,6 @@
     th {
         background-color: #f2f2f2;
     }
-    #printButton {
-        margin-top: 10px;
-    }
 </style>
 </head>
 <body>
@@ -35,67 +32,15 @@
 <table id="stockTable">
     <tr>
         <th>Total Quantity</th>
-        <th>Input Quantity</th>
+        <th>Size 75</th>
+        <th>Size 95</th>
+        <th>Size 115</th>
         <th>Remaining Quantity</th>
         <th>Action</th>
     </tr>
 </table>
 
-<button id="printButton" onclick="printTable()">Print Table</button>
-
 <script>
-    // Function to retrieve data from local storage
-    function getDataFromStorage() {
-        var data = localStorage.getItem('beltStocksData');
-        return data ? JSON.parse(data) : [];
-    }
-
-    // Function to save data to local storage
-    function saveDataToStorage(data) {
-        localStorage.setItem('beltStocksData', JSON.stringify(data));
-    }
-
-    // Function to display data in the table
-    function displayData() {
-        var table = document.getElementById("stockTable");
-        var data = getDataFromStorage();
-        data.forEach(function(entry) {
-            var newRow = table.insertRow(-1);
-            newRow.insertCell().textContent = entry.totalQuantity;
-            newRow.insertCell().textContent = entry.inputQuantity;
-            newRow.insertCell().textContent = entry.remainingQuantity;
-            var editCell = newRow.insertCell();
-            var editBtn = document.createElement("button");
-            editBtn.textContent = "Edit";
-            editBtn.onclick = function() {
-                editEntry(newRow.rowIndex);
-            };
-            editCell.appendChild(editBtn);
-        });
-    }
-
-    // Function to edit an entry
-    function editEntry(rowIndex) {
-        var row = document.getElementById("stockTable").rows[rowIndex];
-        var inputQuantity = parseInt(prompt("Enter new input quantity:"));
-        if (!isNaN(inputQuantity)) {
-            var totalQuantity = parseInt(row.cells[0].textContent);
-            var remainingQuantity = totalQuantity - inputQuantity;
-
-            // Update table
-            row.cells[1].textContent = inputQuantity;
-            row.cells[2].textContent = remainingQuantity;
-
-            // Update data in local storage
-            var data = getDataFromStorage();
-            data[rowIndex - 1].inputQuantity = inputQuantity;
-            data[rowIndex - 1].remainingQuantity = remainingQuantity;
-            saveDataToStorage(data);
-        } else {
-            alert("Invalid input quantity!");
-        }
-    }
-
     // Function to calculate and add a new entry
     function calculate() {
         var inputQuantity = parseInt(document.getElementById("inputQuantity").value);
@@ -114,33 +59,51 @@
         // Insert new row
         var newRow = table.insertRow(-1);
         newRow.insertCell().textContent = totalQuantity;
-        newRow.insertCell().textContent = inputQuantity;
+        newRow.insertCell().textContent = 0; // Placeholder for Size 75
+        newRow.insertCell().textContent = 0; // Placeholder for Size 95
+        newRow.insertCell().textContent = 0; // Placeholder for Size 115
         newRow.insertCell().textContent = remainingQuantity;
         var editCell = newRow.insertCell();
         var editBtn = document.createElement("button");
         editBtn.textContent = "Edit";
         editBtn.onclick = function() {
-            editEntry(newRow.rowIndex);
+            editEntry(newRow);
         };
         editCell.appendChild(editBtn);
 
         // Update total quantity for the next calculation
         totalQuantity = remainingQuantity;
-
-        // Save data to local storage
-        var newData = { totalQuantity: totalQuantity, inputQuantity: inputQuantity, remainingQuantity: remainingQuantity };
-        var data = getDataFromStorage();
-        data.push(newData);
-        saveDataToStorage(data);
     }
 
-    // Function to print the table
-    function printTable() {
-        window.print();
-    }
+    // Function to edit an entry
+    function editEntry(row) {
+        var inputQuantity = parseInt(prompt("Enter new input quantity:"));
+        if (!isNaN(inputQuantity)) {
+            var totalQuantity = parseInt(row.cells[0].textContent);
+            var size75 = parseInt(row.cells[1].textContent);
+            var size95 = parseInt(row.cells[2].textContent);
+            var size115 = parseInt(row.cells[3].textContent);
+            var remainingQuantity = totalQuantity - inputQuantity;
 
-    // Display existing data when the page loads
-    displayData();
+            // Update table
+            var size = prompt("Enter the size (75, 95, 115):");
+            if (size === "75") {
+                row.cells[1].textContent = size75 + inputQuantity;
+            } else if (size === "95") {
+                row.cells[2].textContent = size95 + inputQuantity;
+            } else if (size === "115") {
+                row.cells[3].textContent = size115 + inputQuantity;
+            } else {
+                alert("Invalid size!");
+                return;
+            }
+            row.cells[0].textContent = totalQuantity;
+            row.cells[4].textContent = remainingQuantity;
+
+        } else {
+            alert("Invalid input quantity!");
+        }
+    }
 </script>
 
 </body>
