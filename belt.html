@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Form to Spreadsheet</title>
+<title>Belt Inventory Stock Page</title>
 <style>
   body {
     margin: 0;
@@ -29,8 +29,7 @@
     font-weight: bold;
   }
 
-  input[type="text"],
-  input[type="email"],
+  input[type="number"],
   input[type="submit"] {
     width: 100%;
     padding: 10px;
@@ -48,13 +47,40 @@
 </style>
 </head>
 <body>
-  <form action="https://docs.google.com/forms/d/e/your_form_id/formResponse" method="post" target="_blank">
-    <h1 style="color: red;">Submit Form Data to Spreadsheet</h1>
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="entry.1234567890" required><br>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="entry.0987654321" required><br>
+  <form>
+    <h1 style="color: red;">Belt Inventory Stock</h1>
+    <label for="total">Total Quantity:</label>
+    <input type="number" id="total" name="total" value="" required><br>
+    <label for="input">Input Quantity:</label>
+    <input type="number" id="input" name="input" value="" required><br>
+    <label for="remaining">Remaining Quantity:</label>
+    <input type="number" id="remaining" name="remaining" value="" readonly><br>
     <input type="submit" value="Submit">
   </form>
+
+  <script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Retrieve values from input fields
+      const totalQuantity = parseInt(document.getElementById('total').value);
+      const inputQuantity = parseInt(document.getElementById('input').value);
+      const remainingQuantity = totalQuantity - inputQuantity;
+
+      // Construct URL with parameters
+      const url = `https://docs.google.com/forms/d/e/1FAIpQLSdVGZZh5a8dywmpk-vX1Tvoq7dgFUSx0gNEVcjBSKJu4HzRIQ/viewform?usp=pp_url&entry.1895844902=${totalQuantity}&entry.443251096=${inputQuantity}`;
+
+      // Open Google Form in a new tab
+      window.open(url, '_blank');
+    });
+
+    // Update remaining quantity when input quantity is changed
+    document.getElementById('input').addEventListener('input', function() {
+      const totalQuantity = parseInt(document.getElementById('total').value);
+      const inputQuantity = parseInt(this.value);
+      const remainingQuantity = totalQuantity - inputQuantity;
+      document.getElementById('remaining').value = remainingQuantity;
+    });
+  </script>
 </body>
 </html>
