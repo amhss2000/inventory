@@ -70,7 +70,8 @@
 
 <button id="printButton" onclick="printTable()">Print Table</button>
 <button onclick="shareOnWhatsApp()">Share on WhatsApp</button>
-<button onclick="uploadToFTP()">Upload to FTP</button> <!-- Modified button -->
+<button onclick="uploadToFTP()">Upload to FTP</button>
+<button onclick="exportToExcel()">Export to Excel</button> <!-- Modified button -->
 <button onclick="shareOnGmail()">Share on Gmail</button>
 <button onclick="clearData()">Clear Data</button>
 
@@ -155,15 +156,27 @@
     }
 
     // Function to upload data to FTP server
-    function uploadToGoogleSheets() {
-    var data = JSON.stringify(localStorage.getItem("beltStocksData"));
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://script.google.com/macros/s/AKfycbx3gM7mAP0q4_vroPb22tIF5dBvHkfleUY8xhdVKdx37DOgyhV7hHfV4TdhyqeRguYw/exec", true); // Replace with your deployed web app URL
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            alert(xhr.responseText); // Show response from server
-        }
+    function uploadToFTP() {
+        var data = JSON.stringify(localStorage.getItem("beltStocksData"));
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "ftp_upload_script.php", true); // Replace with your server-side script URL
+        xhr.send(data);
+    }
+
+    // Function to export data to Excel
+    function exportToExcel() {
+        var data = localStorage.getItem("beltStocksData");
+        var csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Date & Time,Total Quantity,Size 75,Size 95,Size 115,Remaining Quantity\n";
+        data.forEach(function(entry) {
+            csvContent += entry.dateTime + "," + entry.totalQuantity + "," + entry.size75 + "," + entry.size95 + "," + entry.size115 + "," + entry.remainingQuantity + "\n";
+        });
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "belt_stock_data.csv");
+        document.body.appendChild(link); // Required for FF
+        link.click();
     }
 
     // Function to share on Gmail
@@ -221,10 +234,6 @@
         data.push(newData);
         saveDataToStorage(data);
     }
-
-  
-}
-
 
     // Display existing data when the page loads
     displayData();
