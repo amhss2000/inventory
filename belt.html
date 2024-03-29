@@ -10,19 +10,6 @@
         font-family: Arial, sans-serif;
         text-align: center;
     }
-    table {
-        width: 80%;
-        border-collapse: collapse;
-        margin: 20px auto;
-    }
-    table, th, td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: center;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
     button {
         background-color: red;
         color: white;
@@ -47,7 +34,7 @@
 <h2>Belt Stocks</h2>
 
 <form id="stockForm">
-    <label for="totalQuantity">Total Quantity:</label>
+    <label for="totalQuantity">Total Quantity (once per day):</label>
     <input type="number" id="totalQuantity" name="totalQuantity">
     <button type="button" onclick="setTotal()">Set Total</button>
     <br>
@@ -55,8 +42,6 @@
     <input type="number" id="inputQuantity" name="inputQuantity">
     <button type="button" onclick="calculate()">Calculate</button>
 </form>
-
-<div id="stockTableContainer"></div>
 
 <button id="printButton" onclick="printTable()">Print Table</button>
 <button onclick="shareOnWhatsApp()">Share on WhatsApp</button>
@@ -88,32 +73,10 @@
         return now.toLocaleString();
     }
 
-    // Function to display existing data when the page loads
-    function displayData() {
-        var totalQuantity = getTotalQuantity();
-        var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
-        var tableContainer = document.getElementById("stockTableContainer");
-        var tableHTML = "<table id='stockTable'><tr><th>Date & Time</th><th>Total Quantity</th><th>Size 75</th><th>Size 95</th><th>Size 115</th><th>Remaining Quantity</th><th>Action</th></tr>";
-        data.forEach(function(entry) {
-            tableHTML += "<tr>";
-            tableHTML += "<td>" + entry.dateTime + "</td>";
-            tableHTML += "<td>" + entry.totalQuantity + "</td>";
-            tableHTML += "<td>" + entry.size75 + "</td>";
-            tableHTML += "<td>" + entry.size95 + "</td>";
-            tableHTML += "<td>" + entry.size115 + "</td>";
-            tableHTML += "<td>" + entry.remainingQuantity + "</td>";
-            tableHTML += "<td><button onclick='editEntry(" + entry.id + ")'>Edit</button></td>";
-            tableHTML += "</tr>";
-        });
-        tableHTML += "</table>";
-        tableContainer.innerHTML = tableHTML;
-    }
-
     // Function to add a new entry to the table
     function addEntry(dateTime, totalQuantity, size75, size95, size115, remainingQuantity) {
         var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
         var newData = {
-            id: data.length + 1,
             dateTime: dateTime,
             totalQuantity: totalQuantity,
             size75: size75,
@@ -123,35 +86,19 @@
         };
         data.push(newData);
         localStorage.setItem("beltStocksData", JSON.stringify(data));
-        displayData();
     }
 
-    // Function to edit an entry
-    function editEntry(id) {
-        var inputQuantity = parseInt(prompt("Enter new input quantity:"));
-        if (!isNaN(inputQuantity)) {
-            var totalQuantity = getTotalQuantity();
-            var size75 = parseInt(prompt("Enter quantity for Size 75:"));
-            var size95 = parseInt(prompt("Enter quantity for Size 95:"));
-            var size115 = parseInt(prompt("Enter quantity for Size 115:"));
-            var remainingQuantity = calculateRemainingQuantity(totalQuantity, inputQuantity);
-
-            // Update data
-            var data = JSON.parse(localStorage.getItem("beltStocksData")) || [];
-            var entry = data.find(function(item) {
-                return item.id === id;
-            });
-            entry.dateTime = getCurrentDateTime();
-            entry.totalQuantity = totalQuantity;
-            entry.size75 = size75;
-            entry.size95 = size95;
-            entry.size115 = size115;
-            entry.remainingQuantity = remainingQuantity;
-            localStorage.setItem("beltStocksData", JSON.stringify(data));
-            displayData();
-        } else {
-            alert("Invalid input quantity!");
-        }
+    // Function to calculate and add a new entry
+    function calculate() {
+        var totalQuantity = getTotalQuantity();
+        var inputQuantity = parseInt(document.getElementById("inputQuantity").value);
+        var remainingQuantity = calculateRemainingQuantity(totalQuantity, inputQuantity);
+        var size75 = parseInt(prompt("Enter quantity for Size 75:"));
+        var size95 = parseInt(prompt("Enter quantity for Size 95:"));
+        var size115 = parseInt(prompt("Enter quantity for Size 115:"));
+        var dateTime = getCurrentDateTime();
+        addEntry(dateTime, totalQuantity, size75, size95, size115, remainingQuantity);
+        window.location.href = "display_data.html"; // Redirect to the display page
     }
 
     // Function to print the table
@@ -182,13 +129,11 @@
         if (confirm("Are you sure you want to clear all data?")) {
             localStorage.removeItem("totalQuantity");
             localStorage.removeItem("beltStocksData");
-            displayData();
+            location.reload();
         }
     }
-
-    // Display existing data when the page loads
-    displayData();
 </script>
 
 </body>
 </html>
+
