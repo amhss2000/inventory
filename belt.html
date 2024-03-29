@@ -8,11 +8,12 @@
     body {
         background-color: skyblue;
         font-family: Arial, sans-serif;
+        text-align: center;
     }
     table {
-        width: 100%;
+        width: 80%;
         border-collapse: collapse;
-        margin-top: 20px;
+        margin: 20px auto;
     }
     table, th, td {
         border: 1px solid black;
@@ -29,10 +30,19 @@
         padding: 10px 20px;
         cursor: pointer;
         border-radius: 5px;
+        margin: 5px;
+    }
+    #logo {
+        width: 150px;
+        height: 150px;
+        display: block;
+        margin: 0 auto;
     }
 </style>
 </head>
 <body>
+
+<img src="logo.png" id="logo" alt="Company Logo">
 
 <h2>Belt Stocks</h2>
 
@@ -62,6 +72,7 @@
 <button onclick="shareOnWhatsApp()">Share on WhatsApp</button>
 <button onclick="shareOnGoogleDrive()">Share on Google Drive</button>
 <button onclick="shareOnGmail()">Share on Gmail</button>
+<button onclick="clearData()">Clear Data</button>
 
 <script>
     // Function to set the total quantity
@@ -155,6 +166,15 @@
         alert("Sharing on Gmail...");
     }
 
+    // Function to clear all data
+    function clearData() {
+        if (confirm("Are you sure you want to clear all data?")) {
+            localStorage.removeItem("totalQuantity");
+            localStorage.removeItem("beltStocksData");
+            location.reload();
+        }
+    }
+
     // Function to display existing data when the page loads
     function displayData() {
         var totalQuantity = getTotalQuantity();
@@ -202,3 +222,4 @@
 
 </body>
 </html>
+
