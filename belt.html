@@ -1,145 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stock Management</title>
-<style>
-    body {
-        background-color: skyblue;
-        text-align: center;
-        font-family: Arial, sans-serif;
-    }
-
-    #container {
-        margin-top: 50px;
-    }
-
-    #logo {
-        width: 100px;
-        height: 100px;
-        margin-bottom: 20px;
-    }
-
-    input[type="number"] {
-        width: 50px;
-        margin-bottom: 10px;
-    }
-
-    table {
-        margin: 20px auto;
-        border-collapse: collapse;
-        width: 60%;
-    }
-
-    th, td {
-        border: 1px solid black;
-        padding: 8px;
-    }
-
-    th {
-        background-color: #f44336;
-        color: white;
-    }
-
-    button {
-        background-color: #f44336;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        margin-top: 20px;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Management</title>
+    <link rel="stylesheet" type="text/css" href="beltstyles.css">
 </head>
 <body>
-<div id="container">
-    <img id="logo" src="logo.png" alt="Logo">
-    <h2>Stock Management - Belts</h2>
-    <p>Total Quantity: <input type="number" id="totalQuantity" value="0"></p>
-    <p>Input Quantity: <input type="number" id="inputQuantity" value="0"></p>
-    <p>Remaining Quantity: <span id="remainingQuantity">0</span></p>
-    <button onclick="updateStock()">Update Stock</button>
-
-    <h3>Size Categories:</h3>
-    <table>
-        <thead>
-        <tr>
-            <th>Size</th>
-            <th>Quantity</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>75</td>
-            <td><span id="size75">0</span></td>
-        </tr>
-        <tr>
-            <td>95</td>
-            <td><span id="size95">0</span></td>
-        </tr>
-        <tr>
-            <td>110</td>
-            <td><span id="size110">0</span></td>
-        </tr>
-        </tbody>
-    </table>
-    <button onclick="printPage()">Print</button>
-</div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-    // Initialize quantities globally
-    let totalQuantity = 0;
-    let size75Quantity = 0;
-    let size95Quantity = 0;
-    let size110Quantity = 0;
-
-    // Load data from OneDrive when the page loads
-    $(document).ready(function() {
-        // Implementation to load data from OneDrive
-        // For simplicity, let's assume data is loaded asynchronously
-        // and update the global variables accordingly
-        // Example:
-        totalQuantity = 100;
-        size75Quantity = 20;
-        size95Quantity = 40;
-        size110Quantity = 40;
-        updateUI();
-    });
-
-    // Function to update stock
-    function updateStock() {
-        const inputQuantity = parseInt(document.getElementById('inputQuantity').value);
-        totalQuantity = parseInt(document.getElementById('totalQuantity').value);
-        size75Quantity += inputQuantity; // Assuming input quantity applies to all sizes
-        size95Quantity += inputQuantity;
-        size110Quantity += inputQuantity;
-        updateUI();
-        // Save data to OneDrive
-        saveDataToOnedrive();
-    }
-
-    // Function to update UI with new data
-    function updateUI() {
-        document.getElementById('remainingQuantity').textContent = totalQuantity - size75Quantity - size95Quantity - size110Quantity;
-        document.getElementById('size75').textContent = size75Quantity;
-        document.getElementById('size95').textContent = size95Quantity;
-        document.getElementById('size110').textContent = size110Quantity;
-    }
-
-    // Function to print the page
-    function printPage() {
-        window.print();
-    }
-
-    // Function to save data to OneDrive
-    function saveDataToOnedrive() {
-        // Implementation to save data to OneDrive using Microsoft Graph API
-        // For simplicity, let's assume data is saved asynchronously
-        // Example:
-        console.log('Data saved to OneDrive');
-    }
-</script>
+    <div class="container">
+        <h1>Stock Management</h1>
+        <form id="stockForm">
+            <label for="total_quantity">Total Quantity:</label>
+            <input type="number" id="total_quantity" name="total_quantity"><br><br>
+            <label for="size_75">Size 75:</label>
+            <input type="number" id="size_75" name="size_75"><br><br>
+            <label for="size_95">Size 95:</label>
+            <input type="number" id="size_95" name="size_95"><br><br>
+            <label for="size_110">Size 110:</label>
+            <input type="number" id="size_110" name="size_110"><br><br>
+            <input type="submit" value="Update" class="button">
+        </form>
+        <br>
+        <table id="stockTable">
+            <thead>
+                <tr>
+                    <th>Size</th>
+                    <th>Input Quantity</th>
+                    <th>Remaining Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>75</td>
+                    <td id="input_75">0</td>
+                    <td id="remaining_75">0</td>
+                </tr>
+                <tr>
+                    <td>95</td>
+                    <td id="input_95">0</td>
+                    <td id="remaining_95">0</td>
+                </tr>
+                <tr>
+                    <td>110</td>
+                    <td id="input_110">0</td>
+                    <td id="remaining_110">0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="beltscript.js"></script>
 </body>
 </html>
