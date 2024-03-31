@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory System</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>Inventory System</h1>
+
+<div class="inventory-table">
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Size</th>
+        <th>Grade</th>
+        <th>Total Quantity</th>
+        <th>Remaining Quantity</th>
+        <th>Input Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Uniform</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="number"></td>
+        <td><input type="number"></td>
+        <td><input type="number"></td>
+      </tr>
+      <!-- Add rows for other products similarly -->
+    </tbody>
+  </table>
+</div>
+
+<button id="saveBtn">Save</button>
+
+<script>
+document.getElementById('saveBtn').addEventListener('click', function() {
+  var rows = document.querySelectorAll('.inventory-table tbody tr');
+  var data = [];
+  rows.forEach(function(row) {
+    var rowData = {
+      product: row.cells[0].textContent,
+      size: row.cells[1].querySelector('input').value,
+      grade: row.cells[2].querySelector('input').value,
+      totalQuantity: row.cells[3].querySelector('input').value,
+      remainingQuantity: row.cells[4].querySelector('input').value,
+      inputQuantity: row.cells[5].querySelector('input').value
+    };
+    data.push(rowData);
+  });
+
+  google.script.run.saveData(data);
+});
+</script>
+
+<!-- Google Apps Script integration -->
+<script>
+function saveData(data) {
+  google.script.run.saveData(data);
+}
+</script>
+
+<!-- Include the Google Apps Script -->
+<script src="https://script.google.com/macros/s/your_script_id_here/exec"></script>
+
+</body>
+</html>
