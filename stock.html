@@ -22,14 +22,14 @@
           <th>Size</th>
           <th>Grade</th>
           <th>Total Quantity</th>
-          <th>Remaining Quantity</th>
           <th>Input Quantity</th>
+          <th>Remaining Quantity</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
-            <select>
+            <select id="productSelect">
               <option value="uniform">Uniform</option>
               <option value="belt">Belt</option>
               <option value="shoe">Shoe</option>
@@ -48,11 +48,11 @@
               <option value="stationary">Stationary</option>
             </select>
           </td>
-          <td><input type="text"></td>
-          <td><input type="text"></td>
-          <td><input type="number"></td>
-          <td><input type="number"></td>
-          <td><input type="number"></td>
+          <td><input type="text" id="sizeInput"></td>
+          <td><input type="text" id="gradeInput"></td>
+          <td><input type="number" id="totalQuantityInput"></td>
+          <td><input type="number" id="inputQuantityInput"></td>
+          <td><input type="number" id="remainingQuantityInput" readonly></td>
         </tr>
         <!-- Add rows for other products similarly -->
       </tbody>
@@ -62,19 +62,6 @@
   <button id="saveBtn">Save</button>
 </div>
 
-<script>
-document.getElementById('saveBtn').addEventListener('click', function() {
-  var tableHtml = document.querySelector('.inventory-table tbody').innerHTML;
-  localStorage.setItem('inventoryData', tableHtml);
-});
-
-window.addEventListener('load', function() {
-  var savedData = localStorage.getItem('inventoryData');
-  if (savedData) {
-    document.querySelector('.inventory-table tbody').innerHTML = savedData;
-  }
-});
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
