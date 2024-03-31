@@ -57,6 +57,8 @@
         </tbody>
     </table>
 
+    <button onclick="saveToGoogleSheets()">Save to Google Sheets</button>
+
     <script>
         function addProduct() {
             var product = document.getElementById("product").value;
@@ -71,6 +73,42 @@
             var table = document.getElementById("inventoryTable").getElementsByTagName('tbody')[0];
             var newRow = table.insertRow();
             newRow.innerHTML = `<td>${product}</td><td>${size}</td><td>${section}</td><td>${totalQuantity}</td><td>${remainingQuantity}</td>`;
+        }
+
+        function saveToGoogleSheets() {
+            // Fetch data from table
+            var table = document.getElementById("inventoryTable");
+            var data = [];
+            for (var i = 1; i < table.rows.length; i++) {
+                var row = table.rows[i];
+                var rowData = [];
+                for (var j = 0; j < row.cells.length; j++) {
+                    rowData.push(row.cells[j].innerText);
+                }
+                data.push(rowData);
+            }
+
+            // Convert data to JSON
+            var jsonData = JSON.stringify(data);
+
+            // Send data to Google Sheets using AJAX or fetch API
+            // Example: 
+            fetch('https://script.google.com/macros/s/your_script_id/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Data saved to Google Sheets successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error occurred while saving data to Google Sheets.');
+            });
         }
     </script>
 </body>
