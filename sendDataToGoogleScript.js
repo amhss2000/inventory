@@ -3,7 +3,7 @@ var data = {
     "age": 24
 };
 
-fetch('https://script.google.com/macros/s/AKfycbxX454JFFDHnJpQ3VM2RDvUeTfuZ5E9gASVVGU61rKTAGXojuEIac8qU3-QF_Fx2NTD4w/exec', {
+fetch('https://script.google.com/macros/s/AKfycbw5AnoWntKDMCpfEQUoANtuAFqA6Ipbe0C7VktkxUEt/dev', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
