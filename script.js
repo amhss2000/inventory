@@ -1,26 +1,25 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var totalQuantityInput = document.getElementById('totalQuantityInput');
-    var inputQuantityInput = document.getElementById('inputQuantityInput');
-    var remainingQuantityInput = document.getElementById('remainingQuantityInput');
+    var uniformTotalQuantityInput = document.getElementById('uniformTotalQuantity');
+    var uniformInputQuantityInput = document.getElementById('uniformInputQuantity');
+    var uniformRemainingQuantityInput = document.getElementById('uniformRemainingQuantity');
   
-    totalQuantityInput.addEventListener('input', updateRemainingQuantity);
-    inputQuantityInput.addEventListener('input', updateRemainingQuantity);
+    uniformTotalQuantityInput.addEventListener('input', updateRemainingQuantity);
+    uniformInputQuantityInput.addEventListener('input', updateRemainingQuantity);
   
     function updateRemainingQuantity() {
-      var totalQuantity = parseInt(totalQuantityInput.value) || 0;
-      var inputQuantity = parseInt(inputQuantityInput.value) || 0;
-      remainingQuantityInput.value = totalQuantity - inputQuantity;
+      var totalQuantity = parseInt(uniformTotalQuantityInput.value) || 0;
+      var inputQuantity = parseInt(uniformInputQuantityInput.value) || 0;
+      uniformRemainingQuantityInput.value = totalQuantity - inputQuantity;
     }
   
     document.getElementById('saveBtn').addEventListener('click', function() {
-      var product = document.getElementById('productSelect').value;
-      var size = document.getElementById('sizeInput').value;
-      var grade = document.getElementById('gradeInput').value;
-      var totalQuantity = parseInt(totalQuantityInput.value) || 0;
-      var inputQuantity = parseInt(inputQuantityInput.value) || 0;
-      var remainingQuantity = parseInt(remainingQuantityInput.value) || 0;
+      var uniformSize = document.getElementById('uniformSize').value;
+      var uniformGrade = document.getElementById('uniformGrade').value;
+      var uniformTotalQuantity = parseInt(uniformTotalQuantityInput.value) || 0;
+      var uniformInputQuantity = parseInt(uniformInputQuantityInput.value) || 0;
+      var uniformRemainingQuantity = parseInt(uniformRemainingQuantityInput.value) || 0;
   
-      google.script.run.saveData(product, size, grade, totalQuantity, inputQuantity, remainingQuantity);
+      google.script.run.saveUniformData(uniformSize, uniformGrade, uniformTotalQuantity, uniformInputQuantity, uniformRemainingQuantity);
     });
   });
   
