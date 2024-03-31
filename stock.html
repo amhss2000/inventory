@@ -1,89 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>School Inventory System</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Inventory System</title>
+    <style>
+        body {
+            background-color: skyblue;
+            text-align: center;
+        }
+        table {
+            margin: auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
-
-<div class="container">
-  <div class="header">
-    <img src="logo.png" alt="School Logo">
     <h1>School Inventory System</h1>
-  </div>
+    <img src="applogo.png" alt="App Logo">
+    <br><br>
 
-  <div class="inventory-section" id="uniformSection">
-    <h2>Uniform</h2>
-    <div class="inventory-item">
-      <label for="uniformSize">Size:</label>
-      <input type="text" id="uniformSize">
-      <label for="uniformGrade">Grade:</label>
-      <input type="text" id="uniformGrade">
-      <label for="uniformTotalQuantity">Total Quantity:</label>
-      <input type="number" id="uniformTotalQuantity">
-      <label for="uniformInputQuantity">Input Quantity:</label>
-      <input type="number" id="uniformInputQuantity">
-      <label for="uniformRemainingQuantity">Remaining Quantity:</label>
-      <input type="number" id="uniformRemainingQuantity" readonly>
+    <div>
+        <label for="product">Product:</label>
+        <select id="product">
+            <option value="uniform">Uniform</option>
+            <option value="belt">Belt</option>
+            <option value="shoe">Shoe</option>
+            <!-- Add other product options here -->
+        </select>
+        <label for="size">Size:</label>
+        <input type="text" id="size">
+        <label for="section">Section:</label>
+        <input type="text" id="section">
+        <label for="totalQuantity">Total Quantity:</label>
+        <input type="number" id="totalQuantity">
+        <button onclick="addProduct()">Add Product</button>
     </div>
-  </div>
+    <br>
 
-  <div class="inventory-section" id="beltSection">
-    <h2>Belt</h2>
-    <div class="inventory-item">
-      <label for="beltSize">Size:</label>
-      <input type="text" id="beltSize">
-      <label for="beltGrade">Grade:</label>
-      <input type="text" id="beltGrade">
-      <label for="beltTotalQuantity">Total Quantity:</label>
-      <input type="number" id="beltTotalQuantity">
-      <label for="beltInputQuantity">Input Quantity:</label>
-      <input type="number" id="beltInputQuantity">
-      <label for="beltRemainingQuantity">Remaining Quantity:</label>
-      <input type="number" id="beltRemainingQuantity" readonly>
-    </div>
-  </div>
+    <table id="inventoryTable">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Size</th>
+                <th>Section</th>
+                <th>Total Quantity</th>
+                <th>Remaining Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Inventory data will be displayed here -->
+        </tbody>
+    </table>
 
-  <div class="inventory-section" id="shoeSection">
-    <h2>Shoe</h2>
-    <div class="inventory-item">
-      <label for="shoeSize">Size:</label>
-      <input type="text" id="shoeSize">
-      <label for="shoeGrade">Grade:</label>
-      <input type="text" id="shoeGrade">
-      <label for="shoeTotalQuantity">Total Quantity:</label>
-      <input type="number" id="shoeTotalQuantity">
-      <label for="shoeInputQuantity">Input Quantity:</label>
-      <input type="number" id="shoeInputQuantity">
-      <label for="shoeRemainingQuantity">Remaining Quantity:</label>
-      <input type="number" id="shoeRemainingQuantity" readonly>
-    </div>
-  </div>
+    <script>
+        function addProduct() {
+            var product = document.getElementById("product").value;
+            var size = document.getElementById("size").value;
+            var section = document.getElementById("section").value;
+            var totalQuantity = document.getElementById("totalQuantity").value;
 
-  <div class="inventory-section" id="socksSection">
-    <h2>Socks</h2>
-    <div class="inventory-item">
-      <label for="socksSize">Size:</label>
-      <input type="text" id="socksSize">
-      <label for="socksGrade">Grade:</label>
-      <input type="text" id="socksGrade">
-      <label for="socksTotalQuantity">Total Quantity:</label>
-      <input type="number" id="socksTotalQuantity">
-      <label for="socksInputQuantity">Input Quantity:</label>
-      <input type="number" id="socksInputQuantity">
-      <label for="socksRemainingQuantity">Remaining Quantity:</label>
-      <input type="number" id="socksRemainingQuantity" readonly>
-    </div>
-  </div>
+            // Calculate remaining quantity
+            var remainingQuantity = totalQuantity;
 
-  <!-- Add sections for other products similarly -->
-
-  <button id="saveBtn">Save</button>
-</div>
-
-<script src="https://rawgit.com/lindell/JsBarcode/master/dist/JsBarcode.all.min.js"></script>
-<script src="script.js"></script>
+            // Add new row to the table
+            var table = document.getElementById("inventoryTable").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+            newRow.innerHTML = `<td>${product}</td><td>${size}</td><td>${section}</td><td>${totalQuantity}</td><td>${remainingQuantity}</td>`;
+        }
+    </script>
 </body>
 </html>
