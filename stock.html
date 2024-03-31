@@ -8,65 +8,73 @@
 </head>
 <body>
 
-<h1>Inventory System</h1>
+<div class="container">
+  <div class="header">
+    <img src="logo.png" alt="School Logo">
+    <h1>School Inventory System</h1>
+  </div>
 
-<div class="inventory-table">
-  <table>
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Size</th>
-        <th>Grade</th>
-        <th>Total Quantity</th>
-        <th>Remaining Quantity</th>
-        <th>Input Quantity</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Uniform</td>
-        <td><input type="text"></td>
-        <td><input type="text"></td>
-        <td><input type="number"></td>
-        <td><input type="number"></td>
-        <td><input type="number"></td>
-      </tr>
-      <!-- Add rows for other products similarly -->
-    </tbody>
-  </table>
+  <div class="inventory-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Size</th>
+          <th>Grade</th>
+          <th>Total Quantity</th>
+          <th>Remaining Quantity</th>
+          <th>Input Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <select>
+              <option value="uniform">Uniform</option>
+              <option value="belt">Belt</option>
+              <option value="shoe">Shoe</option>
+              <option value="socks">Socks</option>
+              <option value="books">Books</option>
+              <option value="notes">Notes</option>
+              <option value="label">Label & Brown Sheet</option>
+              <option value="recordnote">Record Note</option>
+              <option value="tie">Tie</option>
+              <option value="bag">Bag</option>
+              <option value="lunchbox">Lunch Box</option>
+              <option value="lunchbag">Lunch Bag</option>
+              <option value="snacksbox">Snacks Box</option>
+              <option value="waterbottle">Water Bottle</option>
+              <option value="towel">Towel</option>
+              <option value="stationary">Stationary</option>
+            </select>
+          </td>
+          <td><input type="text"></td>
+          <td><input type="text"></td>
+          <td><input type="number"></td>
+          <td><input type="number"></td>
+          <td><input type="number"></td>
+        </tr>
+        <!-- Add rows for other products similarly -->
+      </tbody>
+    </table>
+  </div>
+
+  <button id="saveBtn">Save</button>
 </div>
-
-<button id="saveBtn">Save</button>
 
 <script>
 document.getElementById('saveBtn').addEventListener('click', function() {
-  var rows = document.querySelectorAll('.inventory-table tbody tr');
-  var data = [];
-  rows.forEach(function(row) {
-    var rowData = {
-      product: row.cells[0].textContent,
-      size: row.cells[1].querySelector('input').value,
-      grade: row.cells[2].querySelector('input').value,
-      totalQuantity: row.cells[3].querySelector('input').value,
-      remainingQuantity: row.cells[4].querySelector('input').value,
-      inputQuantity: row.cells[5].querySelector('input').value
-    };
-    data.push(rowData);
-  });
+  var tableHtml = document.querySelector('.inventory-table tbody').innerHTML;
+  localStorage.setItem('inventoryData', tableHtml);
+});
 
-  google.script.run.saveData(data);
+window.addEventListener('load', function() {
+  var savedData = localStorage.getItem('inventoryData');
+  if (savedData) {
+    document.querySelector('.inventory-table tbody').innerHTML = savedData;
+  }
 });
 </script>
-
-<!-- Google Apps Script integration -->
-<script>
-function saveData(data) {
-  google.script.run.saveData(data);
-}
-</script>
-
-<!-- Include the Google Apps Script -->
-<script src="https://script.google.com/macros/s/your_script_id_here/exec"></script>
 
 </body>
 </html>
