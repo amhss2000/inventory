@@ -3,65 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Curved Buttons Grid</title>
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: skyblue;
-    font-family: Arial, sans-serif;
-  }
-
-  .container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    width: 300px;
-  }
-
-  .button {
-    width: 80px;
-    height: 80px;
-    margin: 5px;
-    background-color: #3498db;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-
-  .logo {
-    position: absolute;
-    top: -170px; /* Adjust this value to position the logo */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    height: auto;
-  }
-</style>
+<title>Inventory System</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
 <div class="container">
-  <img src="applogo.jpg" alt="Logo" class="logo">
-  <button class="button" onclick="location.href='stock.html'" target="_blank">belt</button>
-  <button class="button" onclick="location.href='https://www.example.com/page2'" target="_blank">2</button>
-  <button class="button" onclick="location.href='https://www.example.com/page3'" target="_blank">3</button>
-  <button class="button" onclick="location.href='https://www.example.com/page4'" target="_blank">4</button>
-  <button class="button" onclick="location.href='https://www.example.com/page5'" target="_blank">5</button>
-  <button class="button" onclick="location.href='https://www.example.com/page6'" target="_blank">6</button>
-  <button class="button" onclick="location.href='https://www.example.com/page7'" target="_blank">7</button>
-  <button class="button" onclick="location.href='https://www.example.com/page8'" target="_blank">8</button>
-  <button class="button" onclick="location.href='https://www.example.com/page9'" target="_blank">9</button>
+  <div class="header">
+    <img src="logo.png" alt="School Logo">
+    <h1>School Inventory System</h1>
+  </div>
+
+  <div class="inventory-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Size</th>
+          <th>Grade</th>
+          <th>Total Quantity</th>
+          <th>Remaining Quantity</th>
+          <th>Input Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <select>
+              <option value="uniform">Uniform</option>
+              <option value="belt">Belt</option>
+              <option value="shoe">Shoe</option>
+              <option value="socks">Socks</option>
+              <option value="books">Books</option>
+              <option value="notes">Notes</option>
+              <option value="label">Label & Brown Sheet</option>
+              <option value="recordnote">Record Note</option>
+              <option value="tie">Tie</option>
+              <option value="bag">Bag</option>
+              <option value="lunchbox">Lunch Box</option>
+              <option value="lunchbag">Lunch Bag</option>
+              <option value="snacksbox">Snacks Box</option>
+              <option value="waterbottle">Water Bottle</option>
+              <option value="towel">Towel</option>
+              <option value="stationary">Stationary</option>
+            </select>
+          </td>
+          <td><input type="text"></td>
+          <td><input type="text"></td>
+          <td><input type="number"></td>
+          <td><input type="number"></td>
+          <td><input type="number"></td>
+        </tr>
+        <!-- Add rows for other products similarly -->
+      </tbody>
+    </table>
+  </div>
+
+  <button id="saveBtn">Save</button>
 </div>
+
+<script>
+document.getElementById('saveBtn').addEventListener('click', function() {
+  var tableHtml = document.querySelector('.inventory-table tbody').innerHTML;
+  localStorage.setItem('inventoryData', tableHtml);
+});
+
+window.addEventListener('load', function() {
+  var savedData = localStorage.getItem('inventoryData');
+  if (savedData) {
+    document.querySelector('.inventory-table tbody').innerHTML = savedData;
+  }
+});
+</script>
+
 </body>
 </html>
