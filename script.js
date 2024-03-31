@@ -19,7 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
       var uniformInputQuantity = parseInt(uniformInputQuantityInput.value) || 0;
       var uniformRemainingQuantity = parseInt(uniformRemainingQuantityInput.value) || 0;
   
-      google.script.run.saveUniformData(uniformSize, uniformGrade, uniformTotalQuantity, uniformInputQuantity, uniformRemainingQuantity);
+      google.script.run.saveData('Uniform', uniformSize, uniformGrade, uniformTotalQuantity, uniformInputQuantity, uniformRemainingQuantity);
     });
+  
+    // Add similar event listeners and functions for other product sections
   });
   

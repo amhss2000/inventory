@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inventory System</title>
+<title>School Inventory System</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
     <h1>School Inventory System</h1>
   </div>
 
-  <div class="inventory-section">
+  <div class="inventory-section" id="uniformSection">
     <h2>Uniform</h2>
     <div class="inventory-item">
       <label for="uniformSize">Size:</label>
@@ -28,8 +28,57 @@
       <label for="uniformRemainingQuantity">Remaining Quantity:</label>
       <input type="number" id="uniformRemainingQuantity" readonly>
     </div>
-    <!-- Add similar sections for other products -->
   </div>
+
+  <div class="inventory-section" id="beltSection">
+    <h2>Belt</h2>
+    <div class="inventory-item">
+      <label for="beltSize">Size:</label>
+      <input type="text" id="beltSize">
+      <label for="beltGrade">Grade:</label>
+      <input type="text" id="beltGrade">
+      <label for="beltTotalQuantity">Total Quantity:</label>
+      <input type="number" id="beltTotalQuantity">
+      <label for="beltInputQuantity">Input Quantity:</label>
+      <input type="number" id="beltInputQuantity">
+      <label for="beltRemainingQuantity">Remaining Quantity:</label>
+      <input type="number" id="beltRemainingQuantity" readonly>
+    </div>
+  </div>
+
+  <div class="inventory-section" id="shoeSection">
+    <h2>Shoe</h2>
+    <div class="inventory-item">
+      <label for="shoeSize">Size:</label>
+      <input type="text" id="shoeSize">
+      <label for="shoeGrade">Grade:</label>
+      <input type="text" id="shoeGrade">
+      <label for="shoeTotalQuantity">Total Quantity:</label>
+      <input type="number" id="shoeTotalQuantity">
+      <label for="shoeInputQuantity">Input Quantity:</label>
+      <input type="number" id="shoeInputQuantity">
+      <label for="shoeRemainingQuantity">Remaining Quantity:</label>
+      <input type="number" id="shoeRemainingQuantity" readonly>
+    </div>
+  </div>
+
+  <div class="inventory-section" id="socksSection">
+    <h2>Socks</h2>
+    <div class="inventory-item">
+      <label for="socksSize">Size:</label>
+      <input type="text" id="socksSize">
+      <label for="socksGrade">Grade:</label>
+      <input type="text" id="socksGrade">
+      <label for="socksTotalQuantity">Total Quantity:</label>
+      <input type="number" id="socksTotalQuantity">
+      <label for="socksInputQuantity">Input Quantity:</label>
+      <input type="number" id="socksInputQuantity">
+      <label for="socksRemainingQuantity">Remaining Quantity:</label>
+      <input type="number" id="socksRemainingQuantity" readonly>
+    </div>
+  </div>
+
+  <!-- Add sections for other products similarly -->
 
   <button id="saveBtn">Save</button>
 </div>
