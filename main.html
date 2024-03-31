@@ -49,7 +49,7 @@
     <label for="inputQuantity">Input Quantity:</label>
     <input type="number" id="inputQuantity"><br><br>
     <button type="button" onclick="addItem()">Add Item</button>
-    <button type="button" onclick="exportInventory()">Export Inventory</button>
+    <button type="button" onclick="saveToDrive()">Save to Drive</button>
   </form>
   <table id="inventoryTable">
     <thead>
@@ -118,31 +118,21 @@
     window.print();
   }
 
-  // Function to export inventory as CSV
-  function exportInventory() {
-    var table = document.getElementById('inventoryTable');
-    var rows = table.querySelectorAll('tr');
-    var csv = [];
-    for (var i = 0; i < rows.length; i++) {
-      var row = [], cols = rows[i].querySelectorAll('td, th');
-      for (var j = 0; j < cols.length; j++) {
-        row.push(cols[j].innerText);
-      }
-      csv.push(row.join(','));
-    }
-    var csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
-    var encodedUri = encodeURI(csvContent);
-    var link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'inventory.csv');
-    document.body.appendChild(link);
-    link.click();
-  }
+  // Function to save page content to Google Drive
+  function saveToDrive() {
+    var content = document.documentElement.outerHTML;
+    var blob = new Blob([content], { type: 'text/html' });
+    var url = URL.createObjectURL(blob);
 
-  // Periodically check for updates in the inventory (every 5 seconds)
-  setInterval(function() {
-    loadInventory();
-  }, 5000);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'school_inventory.html';
+    document.body.appendChild(a);
+    a.click();
+
+    // Revoke the object URL
+    URL.revokeObjectURL(url);
+  }
 </script>
 
 </body>
