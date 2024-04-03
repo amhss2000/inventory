@@ -1,12 +1,5 @@
-<?php
-include 'config.php';
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Process form submission
-    $input_quantity = $_POST["input_quantity"];
-    $product_name = $_POST["product_name"];
-    // Update database or handle data as per your requirements
-}
-?>
+<!-- add_product.php -->
+<?php include 'config.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h1>Add Product - School Inventory Management System</h1>
         </header>
         <div class="content">
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <form method="post" action="add_product.php">
                 <label for="product_name">Product Name:</label>
                 <select name="product_name" id="product_name">
                     <option value="uniform">Uniform</option>

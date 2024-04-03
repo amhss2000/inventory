@@ -1,12 +1,11 @@
 <?php
-// Database configuration
-define('DB_HOST', 'sql113.infinityfree.com');
-define('DB_USERNAME', 'if0_36256603');
-define('DB_PASSWORD', 'amhss2000');
-define('DB_NAME', 'yif0_36256603_inventory1');
+$host = 'localhost';
+$username = 'your_username';
+$password = 'your_password';
+$database = 'school_inventory';
 
-// Attempt to connect to the database
-$connection = mysqli_connect(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+// Create connection
+$connection = mysqli_connect($host, $username, $password, $database);
 
 // Check connection
 if (!$connection) {

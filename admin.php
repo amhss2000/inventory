@@ -1,7 +1,5 @@
-<?php
-// Include the configuration file
-include 'config.php';
-?>
+<!-- admin.php -->
+<?php include 'config.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +7,6 @@ include 'config.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - School Inventory Management System</title>
     <link rel="stylesheet" href="style.css">
-    
 </head>
 <body>
     <div class="container">
@@ -19,12 +16,27 @@ include 'config.php';
         </header>
         <div class="content">
             <h2>Total Quantities</h2>
-            <ul>
-                <li>Uniform: <?php echo $uniform_quantity; ?></li>
-                <li>Belt: <?php echo $belt_quantity; ?></li>
-                <!-- Add other products here -->
-            </ul>
+            <table>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Total Quantity</th>
+                    <th>Remaining Quantity</th>
+                </tr>
+                <?php
+                $sql = "SELECT * FROM products";
+                $result = mysqli_query($connection, $sql);
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['product_name'] . "</td>";
+                    echo "<td>" . $row['total_quantity'] . "</td>";
+                    echo "<td>" . $row['remaining_quantity'] . "</td>";
+                    echo "</tr>";
+                }
+                ?>
+            </table>
+            <button onclick="window.print()" class="button">Print</button>
         </div>
     </div>
 </body>
 </html>
+
