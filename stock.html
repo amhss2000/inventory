@@ -88,28 +88,11 @@
                 data.push(rowData);
             }
 
-            // Convert data to JSON
-            var jsonData = JSON.stringify(data);
-
-            // Send data to Google Sheets using AJAX or fetch API
-            // Example: 
-            fetch('https://script.google.com/macros/library/d/1VnP7rXVz4B4MpOqAq7VBjrl7XhoQ8XBX2V9sJjo-LFw4gPjFi1VtokPL/1', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: jsonData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('Data saved to Google Sheets successfully!');
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Error occurred while saving data to Google Sheets.');
-            });
+            // Call Google Apps Script function to save data
+            google.script.run.saveDataToGoogleSheets(data);
         }
     </script>
+    <script src="https://apis.google.com/js/api.js"></script>
 </body>
 </html>
+
