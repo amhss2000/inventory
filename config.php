@@ -1,9 +1,9 @@
 <?php
 // Database configuration
-define('DB_HOST', 'localhost');
-define('DB_USERNAME', 'your_username');
-define('DB_PASSWORD', 'your_password');
-define('DB_NAME', 'your_database_name');
+define('DB_HOST', 'sql113.infinityfree.com');
+define('DB_USERNAME', 'if0_36256603');
+define('DB_PASSWORD', 'amhss2000');
+define('DB_NAME', 'yif0_36256603_inventory1');
 
 // Attempt to connect to the database
 $connection = mysqli_connect(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
