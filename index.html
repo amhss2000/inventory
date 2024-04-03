@@ -1,23 +1,65 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Inventory Management System</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading-Inventory</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #87CEEB; /* Sky blue background */
+    font-family: Arial, sans-serif;
+  }
+
+  .loading-container {
+    text-align: center;
+  }
+
+  .glow-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+  .glow-img {
+    width: 200px; /* Adjust size as needed */
+    height: 200px; /* Adjust size as needed */
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f;
+    }
+    100% {
+      box-shadow: 0 0 20px #00f, 0 0 30px #00f, 0 0 40px #00f;
+    }
+  }
+
+  .name {
+    font-size: 24px;
+    color: white;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <img src="logo.png" alt="School Logo">
-            <h1>School Inventory Management System</h1>
-        </header>
-        <div class="content">
-            <a href="add_product.php" class="button">Add Product</a>
-            <a href="admin.php" class="button">Admin</a>
-        </div>
+  <div class="loading-container">
+    <div class="glow-container">
+      <img class="glow-img" src="applogo.jpg" alt="Glowing Image">
     </div>
+    <div class="name">ASHRAM MATRICULATION HIGHER SECONDARY SCHOOL-INVENTORY</div>
+  </div>
+  
+  <script>
+    setTimeout(function() {
+      window.location.href = "home.html"; 
+    }, 3000);
+  </script>
 </body>
 </html>
 
